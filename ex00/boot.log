@@ -1,0 +1,72 @@
+Apr 27 11:10:08 +08:00 (none)  Mounting virtual file systems: /run /proc /sys /dev/shm OK
+Apr 27 11:10:08 +08:00 (none)  Bringing up the loopback interface... OK
+Apr 27 11:10:08 +08:00 (none)  Setting hostname to jng... OK
+Apr 27 11:10:08 +08:00 jng  Populating /dev with device nodes...  OK
+Apr 27 11:10:06 +08:00 jng  Activating all swap files/partitions... OK
+Apr 27 11:10:06 +08:00 jng  Mounting root file system in read-only mode...  OK
+Apr 27 11:10:06 +08:00 jng  Checking file systems... OK
+Apr 27 11:10:07 +08:00 jng  Remounting root file system in read-write mode... OK
+Apr 27 11:10:07 +08:00 jng  Mounting remaining file systems... OK
+Apr 27 11:10:07 +08:00 jng  Cleaning file systems: /tmp OK
+Apr 27 11:10:07 +08:00 jng  Retrying failed uevents, if any... OK
+Apr 27 11:10:08 +08:00 jng  Starting system log daemon... OK
+Apr 27 11:10:08 +08:00 jng  Starting kernel log daemon... OK
+Apr 27 11:10:08 +08:00 jng  Bringing up the enp0s3 interface... OK
+Apr 27 11:10:08 +08:00 jng  Adding IPv4 address 10.0.2.15 to the enp0s3 interface... OK
+Apr 27 11:10:08 +08:00 jng  Adding default gateway 10.0.2.2 to the enp0s3 interface... OK
+Apr 27 11:10:08 +08:00 jng  Starting SSH Server... OK
+--------
+Apr 27 15:07:03 +08:00 (none)  Mounting virtual file systems: /run /proc /sys /dev/shm OK
+Apr 27 15:07:03 +08:00 (none)  Bringing up the loopback interface... OK
+Apr 27 15:07:03 +08:00 (none)  Setting hostname to jng... OK
+Apr 27 15:07:03 +08:00 jng  Populating /dev with device nodes...  OK
+Apr 27 15:06:57 +08:00 jng  Activating all swap files/partitions... OK
+Apr 27 15:06:57 +08:00 jng  Mounting root file system in read-only mode...  OK
+Apr 27 15:06:57 +08:00 jng  Checking file systems... OK
+Apr 27 15:06:57 +08:00 jng  Remounting root file system in read-write mode... OK
+Apr 27 15:06:57 +08:00 jng  Mounting remaining file systems... OK
+Apr 27 15:06:57 +08:00 jng  Cleaning file systems: /tmp OK
+Apr 27 15:06:58 +08:00 jng  Retrying failed uevents, if any... OK
+Apr 27 15:06:59 +08:00 jng  Starting system log daemon... OK
+Apr 27 15:06:59 +08:00 jng  Starting kernel log daemon... OK
+Apr 27 15:06:59 +08:00 jng  Bringing up the enp0s3 interface... OK
+Apr 27 15:06:59 +08:00 jng  Adding IPv4 address 10.0.2.15 to the enp0s3 interface... OK
+Apr 27 15:06:59 +08:00 jng  Adding default gateway 10.0.2.2 to the enp0s3 interface... OK
+Apr 27 15:06:59 +08:00 jng  Starting SSH Server... OK
+--------
+Apr 29 19:05:28 +08:00 (none)  Mounting virtual file systems: /run /proc /sys /dev/shm OK
+Apr 29 19:05:28 +08:00 (none)  Bringing up the loopback interface... OK
+Apr 29 19:05:28 +08:00 (none)  Setting hostname to jng... OK
+Apr 29 19:05:28 +08:00 jng  Populating /dev with device nodes...  OK
+Apr 29 19:05:25 +08:00 jng  Activating all swap files/partitions... OK
+Apr 29 19:05:26 +08:00 jng  Mounting root file system in read-only mode...  OK
+Apr 29 19:05:26 +08:00 jng  Checking file systems... OK
+Apr 29 19:05:26 +08:00 jng  Remounting root file system in read-write mode... OK
+Apr 29 19:05:26 +08:00 jng  Mounting remaining file systems... OK
+Apr 29 19:05:26 +08:00 jng  Cleaning file systems: /tmp OK
+Apr 29 19:05:26 +08:00 jng  Retrying failed uevents, if any... OK
+Apr 29 19:05:27 +08:00 jng  Starting system log daemon... OK
+Apr 29 19:05:27 +08:00 jng  Starting kernel log daemon... OK
+Apr 29 19:05:27 +08:00 jng  Bringing up the enp0s3 interface... OK
+Apr 29 19:05:27 +08:00 jng  Adding IPv4 address 10.0.2.15 to the enp0s3 interface... OK
+Apr 29 19:05:27 +08:00 jng  Adding default gateway 10.0.2.2 to the enp0s3 interface... OK
+Apr 29 19:05:27 +08:00 jng  Starting SSH Server... OK
+--------
+Apr 29 19:44:59 +08:00 (none)  Mounting virtual file systems: /run /proc /sys /dev/shm OK
+Apr 29 19:44:59 +08:00 (none)  Bringing up the loopback interface... OK
+Apr 29 19:44:59 +08:00 (none)  Setting hostname to jng... OK
+Apr 29 19:44:59 +08:00 jng  Populating /dev with device nodes...  OK
+Apr 29 19:25:07 +08:00 jng  Activating all swap files/partitions... OK
+Apr 29 19:25:07 +08:00 jng  Mounting root file system in read-only mode...  OK
+Apr 29 19:25:07 +08:00 jng  Checking file systems... OK
+Apr 29 19:25:07 +08:00 jng  Remounting root file system in read-write mode... OK
+Apr 29 19:25:07 +08:00 jng  Mounting remaining file systems... OK
+Apr 29 19:25:07 +08:00 jng  Cleaning file systems: /tmp OK
+Apr 29 19:25:07 +08:00 jng  Retrying failed uevents, if any... OK
+Apr 29 19:25:08 +08:00 jng  Starting system log daemon... OK
+Apr 29 19:25:08 +08:00 jng  Starting kernel log daemon... OK
+Apr 29 19:25:08 +08:00 jng  Bringing up the enp0s3 interface... OK
+Apr 29 19:25:08 +08:00 jng  Adding IPv4 address 10.0.2.15 to the enp0s3 interface... OK
+Apr 29 19:25:08 +08:00 jng  Adding default gateway 10.0.2.2 to the enp0s3 interface... OK
+Apr 29 19:25:08 +08:00 jng  Starting SSH Server... OK
+--------
