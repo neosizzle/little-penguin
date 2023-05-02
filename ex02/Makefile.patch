@@ -1,0 +1,20 @@
+Subject: Makefile: add extraversion
+
+From: jng <author@mail>
+
+Have you seen the clown that hides from stupid people?
+
+Signed-off-by: jng <author@mail>
+---
+
+--- Makefile    2023-04-24 03:02:52.000000000 +0800
++++ Makefile.dup        2023-04-30 05:12:55.079000000 +0800
+@@ -2,7 +2,7 @@
+ VERSION = 6
+ PATCHLEVEL = 3
+ SUBLEVEL = 0
+-EXTRAVERSION =
++EXTRAVERSION = -thor_kernel
+ NAME = Hurr durr I'ma ninja sloth
+
+ # *DOCUMENTATION*
