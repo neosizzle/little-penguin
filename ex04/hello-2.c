@@ -21,7 +21,7 @@ static struct usb_device_id definition_table[] = {
 		USB_INTERFACE_PROTOCOL_KEYBOARD
 	)},
 	{0}
-}
+};
 MODULE_DEVICE_TABLE(usb, definition_table);
 
 // function to handle probe
