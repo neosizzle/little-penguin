@@ -28,18 +28,19 @@ MODULE_DEVICE_TABLE(usb, definition_table);
 int handle_probe(struct usb_interface *intf, const struct usb_device_id *id)
 {
 	printk(KERN_INFO "Usb PROBED !\n");
+	return 0;
 }
 
 // function to handle disconnect
 int handle_disconnect(struct usb_interface *intf)
 {
 	printk(KERN_INFO "Usb DCED !\n");
+	return 0;
 }
 
 
 // register device
 static struct usb_driver input_driver = {
- .owner = THIS_MODULE,
  .name = "inputDriver",
  .id_table = definition_table,
  .probe = handle_probe,
