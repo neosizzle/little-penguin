@@ -52,10 +52,9 @@ static int fortytwo_init(void)
 	return 0;
 }
 
-static int fortytwo_exit(void)
+static void fortytwo_exit(void)
 {
 	fortytwo_cleanup();
-	return 0;
 }
 
 module_init(fortytwo_init);
