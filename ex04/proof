@@ -1,0 +1,10 @@
+[  +0.088744] input: Logitech USB Receiver Mouse as /devices/pci0000:00/0000:00:06.0/usb2/2-2/2-2:1.1/0003:046D:C534.0016/input/input63
+[  +0.015833] input: Logitech USB Receiver Consumer Control as /devices/pci0000:00/0000:00:06.0/usb2/2-2/2-2:1.1/0003:046D:C534.0016/input/input64
+[  +0.087189] input: Logitech USB Receiver System Control as /devices/pci0000:00/0000:00:06.0/usb2/2-2/2-2:1.1/0003:046D:C534.0016/input/input65
+[  +0.029862] hid-generic 0003:046D:C534.0016: input,hiddev96,hidraw2: USB HID v1.11 Mouse [Logitech USB Receiver] on usb-0000:00:06.0-2/input1
+[  +0.020596] Hello world !
+[  +0.004573] usbcore: registered new interface driver inputDriver
+[  +9.522954] kworker/dying (7507) used greatest stack depth: 11816 bytes left
+[  +4.378372] usb 2-2: USB disconnect, device number 13
+[  +0.168371] Cleaning up module.
+[  +0.004401] usbcore: deregistering interface driver inputDriver

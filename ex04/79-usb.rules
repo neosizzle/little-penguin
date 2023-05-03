@@ -1,0 +1,4 @@
+# /etc/udev/rules.d/79-usb.rules  
+
+ACTION=="add", SUBSYSTEM=="usb", PROGRAM="/usr/sbin/modprobe hello-2"
+ACTION=="remove", SUBSYSTEM=="usb", PROGRAM="/usr/sbin/rmmod hello-2"
