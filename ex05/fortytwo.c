@@ -35,6 +35,7 @@ static void fortytwo_cleanup(void)
 	unregister_chrdev_region(major, 1);
 
 	//	unregister char device
+	unregister_chrdev(major, DEVICE_NAME);
 
 	//	delete device node
 
@@ -44,7 +45,7 @@ static void fortytwo_cleanup(void)
 
 static int fortytwo_init(void)
 {
-	//	get major and minor number
+	//	get major and minor number /proc/devices
 	int major_nums_status = alloc_chrdev_region(&major , ++minor, 1, DEVICE_NAME);
 	if (major_nums_status < 0)
 	{
@@ -54,12 +55,14 @@ static int fortytwo_init(void)
 
 	printk("majornum success %d, num %d\n", major_nums_status, major);
 
-	//	create device class node
+	//	create device class node /sys/classes
 	fortytwo_class = class_create(THIS_MODULE, "fortytwo_class");
 	printk("class create success %s \n", fortytwo_class->name);
-	//  register char device in kernel
 
-	//	create device node
+	//  register char device in kernel @ kernelspace
+	register_chrdev(major, DEVICE_NAME, struct file_operations *fops);
+
+	//	create device node /dev/device
 	return 0;
 }
 
