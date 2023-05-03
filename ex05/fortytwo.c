@@ -3,6 +3,7 @@
 #include <linux/kernel.h>
 #include <linux/fs.h>
 #include <linux/uaccess.h>
+#include <linux/device.h>
 
 #define DEVICE_NAME "fortytwo"
 
