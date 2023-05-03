@@ -1,4 +1,4 @@
-obj-m += hello-2.o
+obj-m += fortytwo.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
