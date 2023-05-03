@@ -26,7 +26,7 @@ static int minor = -1;
 
 // TODO syscalls
 
-static void fortytwo_cleanup()
+static void fortytwo_cleanup(void)
 {
 	//	free major number
 	unregister_chrdev_region(major, 1);
