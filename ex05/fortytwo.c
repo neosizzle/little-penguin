@@ -24,6 +24,8 @@ static struct file_operations fops = {
 static int major = -1;
 static int minor = -1;
 
+struct class* fortytwo_class = NULL;
+
 // TODO syscalls
 
 static void fortytwo_cleanup(void)
@@ -34,6 +36,9 @@ static void fortytwo_cleanup(void)
 	//	unregister char device
 
 	//	delete device node
+
+	//	delete device class node
+	class_destroy(fortytwo_class);
 }
 
 static int fortytwo_init(void)
@@ -45,7 +50,12 @@ static int fortytwo_init(void)
 		printk(KERN_INFO "Major and minor allocation failed.\n");
 		return -1;
 	}
+
 	printk("majornum success %d, num %d\n", major_nums_status, major);
+
+	//	create device class node
+	fortytwo_class = class_create(THIS_MODULE, DEVICE_NAME"_class", NULL);
+	printk("class create success %s \n", fortytwo_class->name);
 	//  register char device in kernel
 
 	//	create device node
@@ -55,6 +65,7 @@ static int fortytwo_init(void)
 static void fortytwo_exit(void)
 {
 	fortytwo_cleanup();
+	printk("42module exit\n");
 }
 
 module_init(fortytwo_init);
