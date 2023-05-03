@@ -26,7 +26,7 @@ static int minor = -1;
 
 // TODO syscalls
 
-static void cleanup()
+static void fortytwo_cleanup()
 {
 	//	free major number
 	unregister_chrdev_region(major, 1);
@@ -42,19 +42,19 @@ static int fortytwo_init(void)
 	int major_nums_status = alloc_chrdev_region(&major , ++minor, 1, DEVICE_NAME);
 	if (major_nums_status < 0)
 	{
-		printk(KERN_INFO "Major and minor allocation failed.\n")
+		printk(KERN_INFO "Major and minor allocation failed.\n");
 		return -1;
 	}
-	printf("majornum success %d, num %d\n", major_nums_status, major);
+	printk("majornum success %d, num %d\n", major_nums_status, major);
 	//  register char device in kernel
 
 	//	create device node
 	return 0;
 }
 
-static int fortwtwo_exit(void)
+static int fortytwo_exit(void)
 {
-	cleanup();
+	fortytwo_cleanup();
 	return 0;
 }
 
