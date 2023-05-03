@@ -3,7 +3,7 @@
 #include <linux/kernel.h>
 #include <linux/fs.h>
 #include <linux/uaccess.h>
-#include <linux/device.h>
+#include <linux/device.h> // class_create, class_destroy
 
 #define DEVICE_NAME "fortytwo"
 
@@ -55,7 +55,7 @@ static int fortytwo_init(void)
 	printk("majornum success %d, num %d\n", major_nums_status, major);
 
 	//	create device class node
-	fortytwo_class = class_create(THIS_MODULE, "fortytwo_class", NULL);
+	fortytwo_class = class_create(THIS_MODULE, "fortytwo_class");
 	printk("class create success %s \n", fortytwo_class->name);
 	//  register char device in kernel
 
