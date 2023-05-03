@@ -55,7 +55,7 @@ static int fortytwo_init(void)
 	printk("majornum success %d, num %d\n", major_nums_status, major);
 
 	//	create device class node
-	fortytwo_class = class_create(THIS_MODULE, DEVICE_NAME"_class", NULL);
+	fortytwo_class = class_create(THIS_MODULE, "fortytwo_class", NULL);
 	printk("class create success %s \n", fortytwo_class->name);
 	//  register char device in kernel
 
