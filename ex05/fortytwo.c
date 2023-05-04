@@ -48,7 +48,7 @@ static int dev_open(struct inode *inodep, struct file *filep) {
 
 static ssize_t dev_write(struct file *filep, const char *buffer,
                          size_t len, loff_t *offset) {
-	char message[len + 1];
+	char message[1024 + 1];
 	int res;
 
 	printk(KERN_INFO "write /dev/fortytwo of length %lu\n", len);
