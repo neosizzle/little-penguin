@@ -29,10 +29,10 @@ static ssize_t foo_read(struct file *filep, char *buffer, size_t len, loff_t *of
 	int copy_fail;
 
 	printk(KERN_INFO "Read /sys/kernel/debug/fortytwo/foo of length %lu with offset %lld\n", len, *offset);
-	length_to_read = len;
-	if (len > PAGE_SIZE)
-		length_to_read = 0;
+	length_to_read = len > PAGE_SIZE ? PAGE_SIZE : PAGE_SIZE - *offset;
 	copy_fail = copy_to_user(buffer, foo_data + *offset, length_to_read);
+	if (copy_fail < 0)
+		return copy_fail;
 	length_to_read -= copy_fail;
 	*offset += length_to_read;
 	return length_to_read;
