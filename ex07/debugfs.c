@@ -2,7 +2,7 @@
 #include <linux/kernel.h>	/* Needed for KERN_INFO */
 #include <linux/debugfs.h> /* debugfs*/
 #include <linux/miscdevice.h>
-#include <linux/stdio.h> /* sprintf*/
+// #include <linux/stdio.h> /* sprintf*/
 #include <linux/jiffies.h>/* jiffies*/
 
 void cleanup(struct dentry * debugfs)
@@ -128,17 +128,12 @@ int init_module(void)
 	}
 
 	// create id file
-	// if (create_id_file() < 0)
-	// {
-	// 	printk(KERN_INFO "create_id_file error\n");
-	// 	return -1;
-	// }
 	struct dentry *id_file = debugfs_create_file("id", 0666,
                                    fortytwo, NULL,
                                    &id_fops);
 	if (id_file == NULL)
 	{
-		printk(KERN_INFO "debugfs_create_dir error\n");
+		printk(KERN_INFO "id debugfs_create_dir error\n");
 		return -1;
 	}
 
@@ -148,7 +143,7 @@ int init_module(void)
                                    &jiffy_fops);
 	if (jiffy_file == NULL)
 	{
-		printk(KERN_INFO "debugfs_create_dir error\n");
+		printk(KERN_INFO "jiffy debugfs_create_dir error\n");
 		return -1;
 	}
 
