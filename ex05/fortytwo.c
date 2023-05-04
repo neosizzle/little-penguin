@@ -67,14 +67,14 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 
 static void fortytwo_cleanup(void)
 {
-	//	unregister char device
-	cdev_del(&mycdev);
-
 	//	delete device node
 	device_destroy(fortytwo_class, 1);
 
 	//	delete device class node
 	class_destroy(fortytwo_class);
+
+	//	unregister char device
+	cdev_del(&mycdev);
 
 	//	free major number
 	unregister_chrdev_region(major, 1);
