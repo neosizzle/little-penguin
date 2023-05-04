@@ -60,7 +60,7 @@ static ssize_t foo_write(struct file *filep, const char *buffer, size_t len, lof
 	// *offset += len_to_cpy;
 	// printk(KERN_INFO "foo: write return %d at len %d\n", len_to_cpy, len);
 	// return len_to_cpy;
-	printk(KERN_INFO "foo: write return %d at len %d\n", len_to_cpy, len);
+	printk(KERN_INFO "foo: write offset %d at len %d\n", *offset, len);
 	return len;
 }
 
