@@ -51,7 +51,7 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 	int size_to_read;
 	int res;
 
-	if (*offset > msg_len)
+	if (*offset >= msg_len)
 		return 0;
 
 	size_to_read = len > msg_len ? msg_len : msg_len - *offset;
