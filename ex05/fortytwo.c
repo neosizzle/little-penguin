@@ -60,7 +60,7 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 		return res;
 	
 	*offset += size_to_read;
-	return res;
+	return size_to_read;
 }
 
 static void fortytwo_cleanup(void)
