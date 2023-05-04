@@ -55,7 +55,7 @@ static ssize_t foo_write(struct file *filep, const char *buffer, size_t len, lof
 		return failed_to_cpy;
 	len_to_cpy -= failed_to_cpy;
 	foo_data_size += len_to_cpy;
-	*offset += len_to_cpy
+	*offset += len_to_cpy;
 	return len_to_cpy;
 }
 
