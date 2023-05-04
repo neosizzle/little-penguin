@@ -1,5 +1,4 @@
-make
-insmod debugfs.ko
+make && insmod debugfs.ko
 echo "bad write echo -n "jng123" > /sys/kernel/debug/fortytwo/id"
 echo -n "jng123" > /sys/kernel/debug/fortytwo/id
 echo "bad write2 echo -n "jn" > /sys/kernel/debug/fortytwo/id"
