@@ -103,6 +103,11 @@ int init_module(void)
 
 	// create debugfs directory
 	fortytwo = debugfs_create_dir("fortytwo", NULL);
+	if (fortytwo == NULL)
+	{
+		printk(KERN_INFO "debugfs_create_dir error\n");
+		return -1;
+	}
 
 	// create id file
 	// if (create_id_file() < 0)
@@ -113,7 +118,11 @@ int init_module(void)
 	struct dentry *id_file = debugfs_create_file("id", 0666,
                                    fortytwo, NULL,
                                    &id_fops);
-
+	if (id_file == NULL)
+	{
+		printk(KERN_INFO "debugfs_create_dir error\n");
+		return -1;
+	}
 	// create jiffies file
 
 	// crate foo file
