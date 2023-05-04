@@ -68,7 +68,7 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 static void fortytwo_cleanup(void)
 {
 	//	delete device node
-	device_destroy(fortytwo_class, 1);
+	device_destroy(fortytwo_class, major);
 
 	//	delete device class node
 	class_destroy(fortytwo_class);
@@ -102,7 +102,7 @@ static int fortytwo_init(void)
 	}
 
 	// testing
-	struct class*  test_class = class_create(THIS_MODULE, "test_class");
+	// struct class*  test_class = class_create(THIS_MODULE, "test_class");
 
 	//	create device node /dev/device
 	if (device_create(fortytwo_class, NULL, major, NULL, DEVICE_NAME) == NULL)
