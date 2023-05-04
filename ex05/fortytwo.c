@@ -28,6 +28,32 @@ struct class* fortytwo_class = NULL;
 static struct cdev mycdev;
 
 // TODO syscalls
+static int dev_open(struct inode *inodep, struct file *filep) {
+   printk(KERN_INFO "Rickroll device opened\n");
+   return 0;
+}
+
+static ssize_t dev_write(struct file *filep, const char *buffer,
+                         size_t len, loff_t *offset) {
+
+   printk(KERN_INFO "Sorry, rickroll is read only\n");
+   return -EFAULT;
+}
+
+static int dev_release(struct inode *inodep, struct file *filep) {
+   printk(KERN_INFO "Rickroll device closed\n");
+   return 0;
+}
+
+static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset) {
+    int errors = 0;
+    char *message = "never gonna give you up, never gonna let you down... ";
+    int message_len = strlen(message);
+
+    errors = copy_to_user(buffer, message, message_len);
+
+    return errors == 0 ? message_len : -EFAULT;
+}
 
 static void fortytwo_cleanup(void)
 {
