@@ -77,7 +77,7 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 	int size_to_read;
 	int res;
 
-	printk(KERN_INFO "Read /dev/fortytwo of length %lu with offset %d\n", len, *offset);
+	printk(KERN_INFO "Read /dev/fortytwo of length %lu with offset %lld\n", len, *offset);
 	if (*offset >= msg_len)
 		return 0;
 
