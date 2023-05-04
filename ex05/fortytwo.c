@@ -52,7 +52,7 @@ static ssize_t dev_write(struct file *filep, const char *buffer,
 	int res;
 
 	printk(KERN_INFO "write /dev/fortytwo of length %lu\n", len);
-	res = copy_from_user(message, buffer, len)
+	res = copy_from_user(message, buffer, len);
 	if ( res < 0)
 	{
 		printk(KERN_INFO "Copy from user error\n");
