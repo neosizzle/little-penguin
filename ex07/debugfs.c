@@ -141,13 +141,13 @@ int init_module(void)
     //                                fortytwo, NULL,
     //                                &jiffies_fops);
 	long unsigned int js = jiffies;
-	struct dentry *jiffy_file = debugfs_create_ulong("jiffies", 0444,
+	debugfs_create_ulong("jiffies", 0444,
                                    fortytwo, &js);
-	if (jiffy_file == NULL)
-	{
-		printk(KERN_INFO "jiffy debugfs_create_dir error\n");
-		return -1;
-	}
+	// if (jiffy_file == NULL)
+	// {
+	// 	printk(KERN_INFO "jiffy debugfs_create_dir error\n");
+	// 	return -1;
+	// }
 
 	// crate foo file
 	return 0;
