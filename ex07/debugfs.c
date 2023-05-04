@@ -2,8 +2,10 @@
 #include <linux/kernel.h>	/* Needed for KERN_INFO */
 #include <linux/debugfs.h> /* debugfs*/
 #include <linux/miscdevice.h>
+#include <linux/stdio.h> /* sprintf*/
+#include <linux/jiffies.h>/* jiffies*/
 
-void cleanup(struct dentry * debugfs, struct miscdevice* id_dev)
+void cleanup(struct dentry * debugfs)
 {
 	// remove id file
 	// misc_deregister(id_dev);
@@ -13,9 +15,39 @@ void cleanup(struct dentry * debugfs, struct miscdevice* id_dev)
 }
 
 /**
+ * jiffy file functions
+*/
+static ssize_t jiffies_read(struct file*, char*, size_t, loff_t*);
+static struct file_operations jiffies_fops = {
+	.owner = THIS_MODULE,
+	.read = jiffy_read,
+};
+
+static ssize_t jiffy_read(struct file *filep, char *buffer, size_t len, loff_t *offset) {
+	unsigned long 
+	char jiffy_str[1024 + 1];
+	sprintf(jiffy_str, "%lu", jiffies);
+	int msg_len = strlen(jiffy_str);
+	int size_to_read;
+	int res;
+
+	printk(KERN_INFO "Read /sys/kernel/debug/fortytwo/id of length %lu with offset %lld\n", len, *offset);
+	if (*offset >= msg_len)
+		return 0;
+
+	size_to_read = len > msg_len ? msg_len : msg_len - *offset;
+	res = copy_to_user(buffer, jiffy_str + *offset, size_to_read);
+	if (res < 0)
+		return res;
+
+	size_to_read -= res;
+	*offset += size_to_read;
+	return size_to_read;
+}
+
+/**
  * id file functions
 */
-
 static ssize_t id_read(struct file*, char*, size_t, loff_t*);
 static ssize_t id_write(struct file*, const char*, size_t, loff_t*);
 static char* login = "jng";
@@ -24,11 +56,6 @@ static struct file_operations id_fops = {
 	.read = id_read,
 	.write = id_write,
 };
-struct miscdevice id_dev = {
-		.minor = MISC_DYNAMIC_MINOR,
-		.name = "id",
-		.fops = &id_fops,
-	};
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
@@ -82,15 +109,6 @@ static ssize_t id_read(struct file *filep, char *buffer, size_t len, loff_t *off
 	return size_to_read;
 }
 
-int create_id_file(void)
-{
-	int error;
-
-	error = misc_register(&id_dev);
-	if (error)
-		misc_deregister(&id_dev);
-	return error;
-}
 
 /**
  * Module
@@ -123,7 +141,16 @@ int init_module(void)
 		printk(KERN_INFO "debugfs_create_dir error\n");
 		return -1;
 	}
+
 	// create jiffies file
+	struct dentry *jiffy_file = debugfs_create_file("id", 0444,
+                                   fortytwo, NULL,
+                                   &jiffy_fops);
+	if (jiffy_file == NULL)
+	{
+		printk(KERN_INFO "debugfs_create_dir error\n");
+		return -1;
+	}
 
 	// crate foo file
 	return 0;
@@ -131,7 +158,7 @@ int init_module(void)
 
 void cleanup_module(void)
 {
-	cleanup(fortytwo, &id_dev);
+	cleanup(fortytwo);
 	printk(KERN_INFO "Cleaning up module.\n");
 }
 
