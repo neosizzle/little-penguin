@@ -26,21 +26,23 @@ static int major = -1;
 static int minor = -1;
 
 struct class* fortytwo_class = NULL;
+static struct cdev mycdev;
 
 // TODO syscalls
 
 static void fortytwo_cleanup(void)
 {
-	//	free major number
-	unregister_chrdev_region(major, 1);
-
 	//	unregister char device
-	unregister_chrdev(major, DEVICE_NAME);
+	cdev_del(&mycdev);
 
 	//	delete device node
+	device_destroy(fortytwo_class, 1);
 
 	//	delete device class node
 	class_destroy(fortytwo_class);
+
+	//	free major number
+	unregister_chrdev_region(major, 1);
 }
 
 static int fortytwo_init(void)
@@ -49,20 +51,37 @@ static int fortytwo_init(void)
 	int major_nums_status = alloc_chrdev_region(&major , ++minor, 1, DEVICE_NAME);
 	if (major_nums_status < 0)
 	{
+		fortytwo_cleanup();
 		printk(KERN_INFO "Major and minor allocation failed.\n");
 		return -1;
 	}
 
-	printk("majornum success %d, num %d\n", major_nums_status, major);
-
 	//	create device class node /sys/classes
 	fortytwo_class = class_create(THIS_MODULE, "fortytwo_class");
-	printk("class create success %s \n", fortytwo_class->name);
-
-	//  register char device in kernel @ kernelspace
-	register_chrdev(major, DEVICE_NAME, struct file_operations *fops);
+	if (fortytwo_class == NULL)
+	{
+		fortytwo_cleanup();
+		printk(KERN_INFO "Class creation failed.\n");
+		return -1;
+	}
 
 	//	create device node /dev/device
+	if (device_create(fortytwo_class) == NULL)
+	{
+		fortytwo_cleanup();
+		printk(KERN_INFO "Device creation failed.\n");
+		return -1;
+	}
+
+	//  register char device in kernel @ kernelspace
+	cdev_init(&mycdev, &fops);
+	if (cdev_add(&mycdev, major, 1) == -1)
+	{
+		fortytwo_cleanup();
+		printk(KERN_INFO "cdev registration failed.\n");
+		return -1;
+	}
+
 	return 0;
 }
 
