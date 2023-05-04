@@ -65,7 +65,7 @@ static int fortytwo_init(void)
 	}
 
 	//	create device node /dev/device
-	if (device_create(fortytwo_class) == NULL)
+	if (device_create(fortytwo_class, NULL, major, NULL, DEVICE_NAME) == NULL)
 	{
 		fortytwo_cleanup();
 		printk(KERN_INFO "Device creation failed.\n");
