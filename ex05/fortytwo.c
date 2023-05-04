@@ -59,7 +59,7 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 	if (res < 0)
 		return res;
 
-	size_to_read -= retval;
+	size_to_read -= res;
 	*offset += size_to_read;
 	return size_to_read;
 }
