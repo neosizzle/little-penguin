@@ -208,7 +208,7 @@ int init_module(void)
 
 	// crate foo file
 	mutex_init(&foo_mutex);
-	struct dentry *foo_file = debugfs_create_file("foo", 0444,
+	struct dentry *foo_file = debugfs_create_file("foo", 0644,
                                    fortytwo, NULL,
                                    &foo_fops);
 	if (foo_file == NULL)
