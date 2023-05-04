@@ -3,6 +3,7 @@
 #include <linux/fs.h> /* register_chrdev, unregister_chrdev */
 #include <linux/module.h>
 #include <linux/seq_file.h> /* seq_read, seq_lseek, single_release */
+#include <linux/miscdevice.h>
 
 #define DEVICE_NAME "fortytwo"
 
@@ -22,7 +23,7 @@ static struct file_operations fops = {
 };
 
 static int major = -1;
-static int minor = -1;
+static int minor = 255;
 
 struct class* fortytwo_class = NULL;
 static struct cdev mycdev;
@@ -40,7 +41,6 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (*(unsigned char *)s1 - *(unsigned char *)s2);
 }
 
-// TODO syscalls
 static int dev_open(struct inode *inodep, struct file *filep) {
    printk(KERN_INFO "Rickroll device opened\n");
    return 0;
@@ -110,7 +110,7 @@ static void fortytwo_cleanup(void)
 static int fortytwo_init(void)
 {
 	//	get major and minor number /proc/devices
-	int major_nums_status = alloc_chrdev_region(&major , ++minor, 1, DEVICE_NAME);
+	int major_nums_status = alloc_chrdev_region(&major , --minor, 1, DEVICE_NAME);
 	if (major_nums_status < 0)
 	{
 		fortytwo_cleanup();
