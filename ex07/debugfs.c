@@ -30,6 +30,18 @@ struct miscdevice id_dev = {
 		.fops = &id_fops,
 	};
 
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	if (!n)
+		return (0);
+	while ((*s1) && (*s1 == *s2) && --n)
+	{
+		s1++;
+		s2++;
+	}
+	return (*(unsigned char *)s1 - *(unsigned char *)s2);
+}
+
 static ssize_t id_write(struct file *filep, const char *buffer,
                          size_t len, loff_t *offset) {
 	char message[1024 + 1];
@@ -100,7 +112,7 @@ int init_module(void)
 	// }
 	struct dentry *id_file = debugfs_create_file("id", 0666,
                                    fortytwo, NULL,
-                                   id_fops);
+                                   &id_fops);
 
 	// create jiffies file
 
