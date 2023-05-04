@@ -55,7 +55,7 @@ static ssize_t dev_write(struct file *filep, const char *buffer,
 		printk(KERN_INFO "Copy from user error\n");
 		return -EFAULT;
 	}
-	if (ft_strncmp(login, message, 3) != 0)
+	if (ft_strncmp(login, message, len) != 0)
 	{
 		printk(KERN_INFO "invalid argument\n");
 		return -EINVAL;
