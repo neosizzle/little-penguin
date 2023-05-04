@@ -24,7 +24,6 @@ static struct file_operations jiffies_fops = {
 };
 
 static ssize_t jiffy_read(struct file *filep, char *buffer, size_t len, loff_t *offset) {
-	unsigned long 
 	char jiffy_str[1024 + 1];
 	sprintf(jiffy_str, "%lu", jiffies);
 	int msg_len = strlen(jiffy_str);
@@ -140,7 +139,7 @@ int init_module(void)
 	// create jiffies file
 	struct dentry *jiffy_file = debugfs_create_file("id", 0444,
                                    fortytwo, NULL,
-                                   &jiffy_fops);
+                                   &jiffies_fops);
 	if (jiffy_file == NULL)
 	{
 		printk(KERN_INFO "jiffy debugfs_create_dir error\n");
