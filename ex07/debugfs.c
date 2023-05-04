@@ -6,7 +6,7 @@
 void cleanup(struct dentry * debugfs, struct miscdevice* id_dev)
 {
 	// remove id file
-	misc_deregister(id_dev);
+	// misc_deregister(id_dev);
 
 	// void debugfs_remove_recursive(struct dentry *dentry);
 	debugfs_remove_recursive(debugfs);
