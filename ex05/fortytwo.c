@@ -1,9 +1,8 @@
-#include <linux/init.h>
+#include <linux/cdev.h> /* cdev_add, cdev_init */
+#include <linux/device.h>
+#include <linux/fs.h> /* register_chrdev, unregister_chrdev */
 #include <linux/module.h>
-#include <linux/kernel.h>
-#include <linux/fs.h>
-#include <linux/uaccess.h>
-#include <linux/device.h> // class_create, class_destroy
+#include <linux/seq_file.h> /* seq_read, seq_lseek, single_release */
 
 #define DEVICE_NAME "fortytwo"
 
