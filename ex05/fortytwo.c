@@ -26,7 +26,7 @@ static int minor = -1;
 
 struct class* fortytwo_class = NULL;
 static struct cdev mycdev;
-static char* login = "jng";
+static char* login = "jng\n";
 
 // TODO syscalls
 static int dev_open(struct inode *inodep, struct file *filep) {
@@ -58,7 +58,8 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 	res = copy_to_user(buffer, login + *offset, size_to_read);
 	if (res < 0)
 		return res;
-	
+
+	size_to_read -= retval;
 	*offset += size_to_read;
 	return size_to_read;
 }
