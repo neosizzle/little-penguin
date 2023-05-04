@@ -137,7 +137,7 @@ int init_module(void)
 	}
 
 	// create jiffies file
-	struct dentry *jiffy_file = debugfs_create_file("id", 0444,
+	struct dentry *jiffy_file = debugfs_create_file("jiffies", 0444,
                                    fortytwo, NULL,
                                    &jiffies_fops);
 	if (jiffy_file == NULL)
