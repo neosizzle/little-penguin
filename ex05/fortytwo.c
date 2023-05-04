@@ -75,6 +75,7 @@ static void fortytwo_cleanup(void)
 
 	//	unregister char device
 	cdev_del(&mycdev);
+	printk(KERN_INFO "cdev del.\n");
 
 	//	free major number
 	unregister_chrdev_region(major, 1);
