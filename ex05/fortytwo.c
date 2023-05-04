@@ -41,7 +41,7 @@ static ssize_t dev_write(struct file *filep, const char *buffer,
 }
 
 static int dev_release(struct inode *inodep, struct file *filep) {
-   printk(KERN_INFO "Rickroll device closed\n");
+   printk(KERN_INFO "Fortytwo device closed\n");
    return 0;
 }
 
@@ -51,7 +51,7 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
     int message_len = strlen(message);
 
     errors = copy_to_user(buffer, message, message_len);
-
+	printk(KERN_INFO buffer);
     return errors == 0 ? message_len : -EFAULT;
 }
 
