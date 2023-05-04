@@ -4,6 +4,7 @@
 #include <linux/miscdevice.h>
 // #include <linux/stdio.h> /* sprintf*/
 #include <linux/jiffies.h>/* jiffies*/
+#include <linux/mutex.h> /* Mutex*/
 
 void cleanup(struct dentry * debugfs)
 {
@@ -14,11 +15,12 @@ void cleanup(struct dentry * debugfs)
 /**
  * foo file functions
 */
-# define PAGE_SIZE 5
 static ssize_t foo_read(struct file*, char*, size_t, loff_t*);
 static ssize_t foo_write(struct file*, const char*, size_t, loff_t*);
 static char foo_data[PAGE_SIZE + 1] = "";
 static int foo_data_size = 0;
+struct mutex foo_mutex; 
+mutex_init(&foo_mutex);
 static struct file_operations foo_fops = {
 	.owner = THIS_MODULE,
 	.read = foo_read,
@@ -33,7 +35,9 @@ static ssize_t foo_read(struct file *filep, char *buffer, size_t len, loff_t *of
 	if (*offset >= foo_data_size)
 		return 0;
 	length_to_read = len > foo_data_size ? foo_data_size : len;
+	mutex_lock(&foo_mutex);
 	copy_fail = copy_to_user(buffer, foo_data + *offset, length_to_read);
+	mutex_unlock(&foo_mutex);
 	if (copy_fail < 0)
 		return copy_fail;
 	length_to_read -= copy_fail;
@@ -58,7 +62,9 @@ static ssize_t foo_write(struct file *filep, const char *buffer, size_t len, lof
 	}
 
 	len_to_cpy = len;
+	mutex_lock(&foo_mutex);
 	failed_to_cpy = copy_from_user(foo_data + *offset, buffer, len_to_cpy);
+	mutex_unlock(&foo_mutex);
 	if (failed_to_cpy < 0)
 		return failed_to_cpy;
 	if (failed_to_cpy != 0)
