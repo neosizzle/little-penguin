@@ -51,6 +51,7 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
     int message_len = strlen(message);
 
     errors = copy_to_user(buffer, message, len);
+	*offset += len;
 	printk(KERN_INFO "%s\n", buffer);
     return errors == 0 ? len : -EFAULT;
 }
