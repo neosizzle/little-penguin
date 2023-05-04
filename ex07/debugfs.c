@@ -7,12 +7,27 @@
 
 void cleanup(struct dentry * debugfs)
 {
-	// remove id file
-	// misc_deregister(id_dev);
-
 	// void debugfs_remove_recursive(struct dentry *dentry);
 	debugfs_remove_recursive(debugfs);
 }
+
+/**
+ * foo file functions
+*/
+// static ssize_t foo_read(struct file*, char*, size_t, loff_t*);
+// static ssize_t foo_write(struct file*, const char*, size_t, loff_t*);
+// static char login[PAGE] = "jng";
+// static struct file_operations foo_fops = {
+// 	.owner = THIS_MODULE,
+// 	.read = foo_read,
+// 	.write = foo_write,
+// };
+
+// static ssize_t foo_read(struct file*, char*, size_t, loff_t*)
+// {
+
+// }
+
 
 /**
  * jiffy file functions
@@ -147,6 +162,7 @@ int init_module(void)
 	}
 
 	// crate foo file
+	printk(KERN_INFO "page size %d\n", PAGE_SIZE);
 	return 0;
 }
 
