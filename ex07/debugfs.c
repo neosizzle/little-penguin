@@ -17,7 +17,7 @@ void cleanup(struct dentry * debugfs)
 /**
  * jiffy file functions
 */
-static ssize_t jiffies_read(struct file*, char*, size_t, loff_t*);
+static ssize_t jiffy_read(struct file*, char*, size_t, loff_t*);
 static struct file_operations jiffies_fops = {
 	.owner = THIS_MODULE,
 	.read = jiffy_read,
