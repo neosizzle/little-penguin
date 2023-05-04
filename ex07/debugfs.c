@@ -14,19 +14,28 @@ void cleanup(struct dentry * debugfs)
 /**
  * foo file functions
 */
-// static ssize_t foo_read(struct file*, char*, size_t, loff_t*);
-// static ssize_t foo_write(struct file*, const char*, size_t, loff_t*);
-// static char login[PAGE] = "jng";
-// static struct file_operations foo_fops = {
-// 	.owner = THIS_MODULE,
-// 	.read = foo_read,
-// 	.write = foo_write,
-// };
+static ssize_t foo_read(struct file*, char*, size_t, loff_t*);
+static ssize_t foo_write(struct file*, const char*, size_t, loff_t*);
+static char foo_data[PAGE_SIZE] = "ben ten";
+static struct file_operations foo_fops = {
+	.owner = THIS_MODULE,
+	.read = foo_read,
+	.write = foo_write,
+};
 
-// static ssize_t foo_read(struct file*, char*, size_t, loff_t*)
-// {
+static ssize_t foo_read(struct file *filep, char *buffer, size_t len, loff_t *offset)
+{
+	int length_to_read;
+	int copy_fail;
 
-// }
+	length_to_read = len;
+	if (len > PAGE_SIZE)
+		length_to_read = 0;
+	copy_fail = copy_to_user(buffer, foo_data + *offset, length_to_read);
+	length_to_read -= copy_fail;
+	*offset += length_to_read
+	return length_to_read;
+}
 
 
 /**
