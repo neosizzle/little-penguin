@@ -50,7 +50,7 @@ static ssize_t dev_write(struct file *filep, const char *buffer,
                          size_t len, loff_t *offset) {
 	char message[len + 1];
 
-	printk(KERN_INFO "write /dev/fortytwo of length %d\n", len);
+	printk(KERN_INFO "write /dev/fortytwo of length %lu\n", len);
 	if (copy_from_user(message, buffer, len) < 0)
 	{
 		printk(KERN_INFO "Copy from user error\n");
@@ -75,7 +75,7 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 	int size_to_read;
 	int res;
 
-	printk(KERN_INFO "Read /dev/fortytwo of length %d with offset %d\n", len, *offset);
+	printk(KERN_INFO "Read /dev/fortytwo of length %lu with offset %lu\n", len, *offset);
 	if (*offset >= msg_len)
 		return 0;
 

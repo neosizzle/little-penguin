@@ -8,4 +8,5 @@ echo "bad write3"
 echo -n "dabb" > /dev/fortytwo
 echo "read"
 cat /dev/fortytwo
+echo ""
 rmmod fortytwo.ko
