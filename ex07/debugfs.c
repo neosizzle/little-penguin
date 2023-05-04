@@ -17,7 +17,7 @@ void cleanup(struct dentry * debugfs)
 # define PAGE_SIZE 5
 static ssize_t foo_read(struct file*, char*, size_t, loff_t*);
 static ssize_t foo_write(struct file*, const char*, size_t, loff_t*);
-static char foo_data[PAGE_SIZE] = "";
+static char foo_data[PAGE_SIZE + 1] = "";
 static int foo_data_size = 0;
 static struct file_operations foo_fops = {
 	.owner = THIS_MODULE,
@@ -47,7 +47,10 @@ static ssize_t foo_write(struct file *filep, const char *buffer, size_t len, lof
 	int failed_to_cpy;
 
 	if (*offset >= PAGE_SIZE)
+	{
+		printk(KERN_INFO "foo: *offset >= PAGE_SIZE at offset %d len %d \n", *offset, len);
 		return 0;
+	}
 	len_to_cpy = len + *offset < PAGE_SIZE ?  len : PAGE_SIZE - foo_data_size;
 	failed_to_cpy = copy_from_user(foo_data + *offset, buffer, len_to_cpy);
 	if (failed_to_cpy < 0)
