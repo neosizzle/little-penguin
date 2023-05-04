@@ -54,7 +54,7 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 	if (*offset > msg_len)
 		return 0;
 
-	size_to_read = len > msg_len ? msg_len : msg_len - offset;
+	size_to_read = len > msg_len ? msg_len : msg_len - *offset;
 	res = copy_to_user(buffer, login + *offset, size_to_read);
 	if (res < 0)
 		return res;
