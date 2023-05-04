@@ -1,0 +1,11 @@
+make -C /lib/modules/6.1.11/build M=/root/little-penguin/ex05 modules
+make[1]: Entering directory '/usr/src/kernel-6.1.11/linux-6.1.11'
+make[1]: Leaving directory '/usr/src/kernel-6.1.11/linux-6.1.11'
+bad write echo -n jng123 > /dev/fortytwo
+test.sh: line 4: echo: write error: Invalid argument
+bad write2 echo -n jn > /dev/fortytwo
+test.sh: line 6: echo: write error: Invalid argument
+bad write3 echo -n dabb > /dev/fortytwo
+test.sh: line 8: echo: write error: Invalid argument
+read cat /dev/fortytwo
+jng

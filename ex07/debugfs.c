@@ -14,10 +14,11 @@ void cleanup(struct dentry * debugfs)
 /**
  * foo file functions
 */
+# define PAGE_SIZE 5
 static ssize_t foo_read(struct file*, char*, size_t, loff_t*);
 static ssize_t foo_write(struct file*, const char*, size_t, loff_t*);
-static char foo_data[PAGE_SIZE] = "ben ten";
-static int foo_data_size = 7;
+static char foo_data[PAGE_SIZE] = "";
+static int foo_data_size = 0;
 static struct file_operations foo_fops = {
 	.owner = THIS_MODULE,
 	.read = foo_read,
@@ -31,7 +32,6 @@ static ssize_t foo_read(struct file *filep, char *buffer, size_t len, loff_t *of
 
 	if (*offset >= foo_data_size)
 		return 0;
-	printk(KERN_INFO "Read /sys/kernel/debug/fortytwo/foo of length %lu with offset %lld\n", len, *offset);
 	length_to_read = len > foo_data_size ? foo_data_size : len;
 	copy_fail = copy_to_user(buffer, foo_data + *offset, length_to_read);
 	if (copy_fail < 0)
@@ -44,7 +44,19 @@ static ssize_t foo_read(struct file *filep, char *buffer, size_t len, loff_t *of
 static ssize_t foo_write(struct file *filep, const char *buffer, size_t len, loff_t *offset)
 {
 	printk(KERN_INFO "foo: write executed\n");
-	return len;
+	int len_to_cpy;
+	int failed_to_cpy;
+
+	if (*offset >= PAGE_SIZE)
+		return 0;
+	len_to_cpy = len + *offset < PAGE_SIZE ?  len : PAGE_SIZE - foo_data_size;
+	failed_to_cpy = copy_from_user(foo_data + *offset, buffer, len);
+	if (failed_to_cpy < 0)
+		return failed_to_cpy;
+	len_to_cpy -= failed_to_cpy;
+	foo_data_size += len_to_cpy;
+	*offset += len_to_cpy
+	return len_to_cpy;
 }
 
 /**
