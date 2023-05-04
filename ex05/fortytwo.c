@@ -26,6 +26,7 @@ static int minor = -1;
 
 struct class* fortytwo_class = NULL;
 static struct cdev mycdev;
+static char* login = "jng";
 
 // TODO syscalls
 static int dev_open(struct inode *inodep, struct file *filep) {
@@ -46,14 +47,20 @@ static int dev_release(struct inode *inodep, struct file *filep) {
 }
 
 static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset) {
-    int errors = 0;
-    char *message = "never gonna give you up, never gonna let you down... ";
-    int message_len = strlen(message);
+	int msg_len = strlen(login);
+	int size_to_read;
+	int res;
 
-    errors = copy_to_user(buffer, message, message_len);
-	*offset += message_len;
-	printk(KERN_INFO "%s\n", buffer);
-    return errors == 0 ? message_len : -EFAULT;
+	if (*offset > msg_len)
+		return 0;
+
+	size_to_read = len > msg_len ? msg_len : msg_len - offset;
+	res = copy_to_user(buffer, login + *offset, size_to_read);
+	if (res < 0)
+		return res;
+	
+	*offset += size_to_read;
+	return res;
 }
 
 static void fortytwo_cleanup(void)
