@@ -50,10 +50,10 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
     char *message = "never gonna give you up, never gonna let you down... ";
     int message_len = strlen(message);
 
-    errors = copy_to_user(buffer, message, len);
-	*offset += len;
+    errors = copy_to_user(buffer, message, message_len);
+	*offset += message_len;
 	printk(KERN_INFO "%s\n", buffer);
-    return errors == 0 ? len : -EFAULT;
+    return errors == 0 ? message_len : -EFAULT;
 }
 
 static void fortytwo_cleanup(void)
