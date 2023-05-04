@@ -17,6 +17,7 @@ void cleanup(struct dentry * debugfs)
 static ssize_t foo_read(struct file*, char*, size_t, loff_t*);
 static ssize_t foo_write(struct file*, const char*, size_t, loff_t*);
 static char foo_data[PAGE_SIZE] = "ben ten";
+static int foo_data_size = 7;
 static struct file_operations foo_fops = {
 	.owner = THIS_MODULE,
 	.read = foo_read,
@@ -29,7 +30,7 @@ static ssize_t foo_read(struct file *filep, char *buffer, size_t len, loff_t *of
 	int copy_fail;
 
 	printk(KERN_INFO "Read /sys/kernel/debug/fortytwo/foo of length %lu with offset %lld\n", len, *offset);
-	length_to_read = len > PAGE_SIZE ? PAGE_SIZE : PAGE_SIZE - *offset;
+	length_to_read = len > foo_data_size ? foo_data_size : len;
 	copy_fail = copy_to_user(buffer, foo_data + *offset, length_to_read);
 	if (copy_fail < 0)
 		return copy_fail;
