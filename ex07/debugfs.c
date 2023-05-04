@@ -19,8 +19,7 @@ static ssize_t foo_read(struct file*, char*, size_t, loff_t*);
 static ssize_t foo_write(struct file*, const char*, size_t, loff_t*);
 static char foo_data[PAGE_SIZE + 1] = "";
 static int foo_data_size = 0;
-struct mutex foo_mutex; 
-mutex_init(&foo_mutex);
+struct mutex foo_mutex;
 static struct file_operations foo_fops = {
 	.owner = THIS_MODULE,
 	.read = foo_read,
@@ -208,6 +207,7 @@ int init_module(void)
 	}
 
 	// crate foo file
+	mutex_init(&foo_mutex);
 	struct dentry *foo_file = debugfs_create_file("foo", 0444,
                                    fortytwo, NULL,
                                    &foo_fops);
