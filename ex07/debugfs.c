@@ -37,7 +37,7 @@ static ssize_t foo_read(struct file *filep, char *buffer, size_t len, loff_t *of
 	return length_to_read;
 }
 
-static ssize_t foo_write(struct file *filep, char *buffer, size_t len, loff_t *offset)
+static ssize_t foo_write(struct file *filep, const char *buffer, size_t len, loff_t *offset)
 {
 	printk(KERN_INFO "foo: write executed\n");
 	return len;
