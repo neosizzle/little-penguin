@@ -43,14 +43,13 @@ static ssize_t foo_read(struct file *filep, char *buffer, size_t len, loff_t *of
 
 static ssize_t foo_write(struct file *filep, const char *buffer, size_t len, loff_t *offset)
 {
-	printk(KERN_INFO "foo: write executed\n");
 	int len_to_cpy;
 	int failed_to_cpy;
 
 	if (*offset >= PAGE_SIZE)
 		return -1;
 	len_to_cpy = len + *offset < PAGE_SIZE ?  len : PAGE_SIZE - foo_data_size;
-	failed_to_cpy = copy_from_user(foo_data + *offset, buffer, len);
+	failed_to_cpy = copy_from_user(foo_data + *offset, buffer, len_to_cpy);
 	if (failed_to_cpy < 0)
 		return failed_to_cpy;
 	len_to_cpy -= failed_to_cpy;
