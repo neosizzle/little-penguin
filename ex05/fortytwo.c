@@ -3,7 +3,6 @@
 #include <linux/fs.h> /* register_chrdev, unregister_chrdev */
 #include <linux/module.h>
 #include <linux/seq_file.h> /* seq_read, seq_lseek, single_release */
-#include <string.h>
 
 #define DEVICE_NAME "fortytwo"
 
@@ -29,6 +28,18 @@ struct class* fortytwo_class = NULL;
 static struct cdev mycdev;
 static char* login = "jng";
 
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	if (!n)
+		return (0);
+	while ((*s1) && (*s1 == *s2) && --n)
+	{
+		s1++;
+		s2++;
+	}
+	return (*(unsigned char *)s1 - *(unsigned char *)s2);
+}
+
 // TODO syscalls
 static int dev_open(struct inode *inodep, struct file *filep) {
    printk(KERN_INFO "Rickroll device opened\n");
@@ -45,7 +56,7 @@ static ssize_t dev_write(struct file *filep, const char *buffer,
 		printk(KERN_INFO "Copy from user error\n");
 		return -EFAULT;
 	}
-	if (strcmp(login, message) != 0)
+	if (ft_strncmp(login, message, 3) != 0)
 	{
 		printk(KERN_INFO "invalid argument\n");
 		return -EINVAL;
