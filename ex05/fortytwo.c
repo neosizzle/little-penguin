@@ -3,6 +3,7 @@
 #include <linux/fs.h> /* register_chrdev, unregister_chrdev */
 #include <linux/module.h>
 #include <linux/seq_file.h> /* seq_read, seq_lseek, single_release */
+#include <string.h>
 
 #define DEVICE_NAME "fortytwo"
 
@@ -26,7 +27,7 @@ static int minor = -1;
 
 struct class* fortytwo_class = NULL;
 static struct cdev mycdev;
-static char* login = "jng\n";
+static char* login = "jng";
 
 // TODO syscalls
 static int dev_open(struct inode *inodep, struct file *filep) {
@@ -36,9 +37,21 @@ static int dev_open(struct inode *inodep, struct file *filep) {
 
 static ssize_t dev_write(struct file *filep, const char *buffer,
                          size_t len, loff_t *offset) {
+	char message[len + 1];
 
-   printk(KERN_INFO "Sorry, rickroll is read only\n");
-   return -EFAULT;
+	bzero(message, len + 1);
+	if (copy_from_user(message, buffer, len) < 0)
+	{
+		printk(KERN_INFO "Copy from user error\n");
+		return -EFAULT;
+	}
+	if (strcmp(login, message) != 0)
+	{
+		printk(KERN_INFO "invalid argument\n");
+		return -EINVAL;
+	}
+	printk(KERN_INFO "correct value\n");
+	return len;
 }
 
 static int dev_release(struct inode *inodep, struct file *filep) {
@@ -120,7 +133,7 @@ static int fortytwo_init(void)
 		printk(KERN_INFO "cdev registration failed.\n");
 		return -1;
 	}
-
+	printk("42module init\n");
 	return 0;
 }
 
