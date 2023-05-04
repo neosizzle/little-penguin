@@ -43,23 +43,25 @@ static ssize_t foo_read(struct file *filep, char *buffer, size_t len, loff_t *of
 
 static ssize_t foo_write(struct file *filep, const char *buffer, size_t len, loff_t *offset)
 {
-	int len_to_cpy;
-	int failed_to_cpy;
+	// int len_to_cpy;
+	// int failed_to_cpy;
 
-	if (*offset >= PAGE_SIZE)
-	{
-		printk(KERN_INFO "foo: *offset >= PAGE_SIZE at offset %d len %d \n", *offset, len);
-		return 0;
-	}
-	len_to_cpy = len + *offset < PAGE_SIZE ?  len : PAGE_SIZE - foo_data_size;
-	failed_to_cpy = copy_from_user(foo_data + *offset, buffer, len_to_cpy);
-	if (failed_to_cpy < 0)
-		return failed_to_cpy;
-	len_to_cpy -= failed_to_cpy;
-	foo_data_size += len_to_cpy;
-	*offset += len_to_cpy;
+	// if (*offset >= PAGE_SIZE)
+	// {
+	// 	printk(KERN_INFO "foo: *offset >= PAGE_SIZE at offset %d len %d \n", *offset, len);
+	// 	return 0;
+	// }
+	// len_to_cpy = len + *offset < PAGE_SIZE ?  len : PAGE_SIZE - foo_data_size;
+	// failed_to_cpy = copy_from_user(foo_data + *offset, buffer, len_to_cpy);
+	// if (failed_to_cpy < 0)
+	// 	return failed_to_cpy;
+	// len_to_cpy -= failed_to_cpy;
+	// foo_data_size += len_to_cpy;
+	// *offset += len_to_cpy;
+	// printk(KERN_INFO "foo: write return %d at len %d\n", len_to_cpy, len);
+	// return len_to_cpy;
 	printk(KERN_INFO "foo: write return %d at len %d\n", len_to_cpy, len);
-	return len_to_cpy;
+	return len;
 }
 
 /**
