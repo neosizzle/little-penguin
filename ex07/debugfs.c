@@ -33,10 +33,15 @@ static ssize_t foo_read(struct file *filep, char *buffer, size_t len, loff_t *of
 		length_to_read = 0;
 	copy_fail = copy_to_user(buffer, foo_data + *offset, length_to_read);
 	length_to_read -= copy_fail;
-	*offset += length_to_read
+	*offset += length_to_read;
 	return length_to_read;
 }
 
+static ssize_t foo_write(struct file *filep, char *buffer, size_t len, loff_t *offset)
+{
+	printk(KERN_INFO "foo: write executed\n");
+	return len;
+}
 
 /**
  * jiffy file functions
@@ -171,7 +176,14 @@ int init_module(void)
 	}
 
 	// crate foo file
-	printk(KERN_INFO "page size %d\n", PAGE_SIZE);
+	struct dentry *foo_file = debugfs_create_file("foo", 0444,
+                                   fortytwo, NULL,
+                                   &foo_fops);
+	if (foo_file == NULL)
+	{
+		printk(KERN_INFO "foo debugfs_create_dir error\n");
+		return -1;
+	}
 	return 0;
 }
 
