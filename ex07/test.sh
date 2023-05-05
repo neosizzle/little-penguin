@@ -184,8 +184,8 @@ if [[ "$output_value" == "$string_to_search" ]]
 	then
 		printf "$BGreen OK $Color_Off\n"
 	else
-		printf "$BRed KO $Color_Off\n"
+		printf "$BRed KO $Color_Off , $output_value\n"
 fi
 
 
-# rmmod debugfs.ko
+rmmod debugfs.ko
