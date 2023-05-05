@@ -132,13 +132,13 @@ if [[ "$output_value" == "$string_to_search" ]]
 		printf "$BRed KO $Color_Off\n"
 fi
 
-# TEST 8
-echo -n hello > /sys/kernel/debug/fortytwo/foo
+# TEST 7
+cat "$PWD/testfiles/midfile" > /sys/kernel/debug/fortytwo/foo
 output_value=$((cat /sys/kernel/debug/fortytwo/foo) 2>&1)
 
 
-string_to_search="hello"
-printf "[TEST 8] Comparing for $Cyan '$string_to_search' $Color_Off in output.. (cat /sys/kernel/debug/fortytwo/foo).."
+string_to_search="$(cat $PWD/testfiles/midfile)"
+printf "[TEST 7] Comparing for $Cyan '$string_to_search' $Color_Off in output.. (cat /sys/kernel/debug/fortytwo/foo).."
 
 if [[ "$output_value" == "$string_to_search" ]]
 	then
