@@ -24,8 +24,6 @@ BWhite='\033[1;37m'       # White
 clear
 make
 insmod fortytwo.ko
-# echo "bad write3 echo -n "dabb" > /dev/fortytwo"
-# echo -n 'dabb' > /dev/fortytwo
 # echo "read cat /dev/fortytwo"
 # cat /dev/fortytwo
 # echo ""
@@ -35,7 +33,7 @@ output_value=$((echo -n 'jng123' > /dev/fortytwo) 2>&1)
 
 
 string_to_search="Invalid argument"
-printf "[TEST 1] Searching for $BPurple $string_to_search $Color_Off in output.. (echo -n 'jng123' > /dev/fortytwo)\n"
+printf "[TEST 1] Searching for $Cyan $string_to_search $Color_Off in output.. (echo -n 'jng123' > /dev/fortytwo)\n"
 
 if [[ "$output_value" == *"$string_to_search"* ]]
 	then
@@ -50,7 +48,7 @@ output_value=$((echo -n 'jn' > /dev/fortytwo) 2>&1)
 
 
 string_to_search="Invalid argument"
-printf "[TEST 2] Searching for $BPurple $string_to_search $Color_Off in output.. (echo -n 'jn' > /dev/fortytwo)\n"
+printf "[TEST 2] Searching for $Cyan $string_to_search $Color_Off in output.. (echo -n 'jn' > /dev/fortytwo)\n"
 
 if [[ "$output_value" == *"$string_to_search"* ]]
 	then
@@ -64,7 +62,7 @@ output_value=$((echo -n 'dabb' > /dev/fortytwo) 2>&1)
 
 
 string_to_search="Invalid argument"
-printf "[TEST 3] Searching for $BPurple $string_to_search $Color_Off in output.. (echo -n 'dabb' > /dev/fortytwo)\n"
+printf "[TEST 3] Searching for $Cyan $string_to_search $Color_Off in output.. (echo -n 'dabb' > /dev/fortytwo)\n"
 
 if [[ "$output_value" == *"$string_to_search"* ]]
 	then
@@ -78,9 +76,23 @@ output_value=$((echo -n 'jng' > /dev/fortytwo) 2>&1)
 
 
 val_to_cmp=$?
-printf "[TEST 4] Return value $BPurple 0 $Color_Off in output.. (echo -n 'jng' > /dev/fortytwo)\n"
+printf "[TEST 4] Return value $Cyan 0 $Color_Off in output.. (echo -n 'jng' > /dev/fortytwo)\n"
 
 if [[ $val_to_cmp == 0 ]]
+	then
+		printf "$BGreen OK $Color_Off\n"
+	else
+		printf "$BRed KO $Color_Off\n"
+fi
+
+# TEST 5
+output_value=$((cat /dev/fortytwo) 2>&1)
+
+
+string_to_search="jng"
+printf "[TEST 5] Searching for $Cyan $string_to_search $Color_Off in output.. (cat /dev/fortytwo)\n"
+
+if [[ "$output_value" == *"$string_to_search"* ]]
 	then
 		printf "$BGreen OK $Color_Off\n"
 	else
