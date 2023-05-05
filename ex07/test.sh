@@ -161,4 +161,31 @@ if [[ "$output_value" == *"$string_to_search"* ]]
 		printf "$BRed KO $Color_Off\n"
 fi
 
+# TEST 11
+output_value=$((su jng -c 'echo asdf > /sys/kernel/debug/fortytwo/foo') 2>&1)
+
+string_to_search="Permission denied"
+printf "[TEST 11] Searching for $Cyan $string_to_search $Color_Off in output.. (su jng -c 'echo asdf > /sys/kernel/debug/fortytwo/foo').."
+
+if [[ "$output_value" == *"$string_to_search"* ]]
+	then
+		printf "$BGreen OK $Color_Off\n"
+	else
+		printf "$BRed KO $Color_Off\n"
+fi
+
+# TEST 12
+output_value=$((su jng -c 'cat /sys/kernel/debug/fortytwo/foo') 2>&1)
+
+string_to_search="$(cat $PWD/testfiles/midfile)"
+printf "[TEST 12] Comparing for $Cyan '$string_to_search' $Color_Off in output.. (su jng -c 'cat /sys/kernel/debug/fortytwo/foo').."
+
+if [[ "$output_value" == "$string_to_search" ]]
+	then
+		printf "$BGreen OK $Color_Off\n"
+	else
+		printf "$BRed KO $Color_Off\n"
+fi
+
+
 rmmod debugfs.ko
