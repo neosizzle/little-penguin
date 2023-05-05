@@ -188,4 +188,4 @@ if [[ "$output_value" == "$string_to_search" ]]
 fi
 
 
-rmmod debugfs.ko
+# rmmod debugfs.ko
