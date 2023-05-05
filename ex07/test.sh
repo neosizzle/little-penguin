@@ -101,7 +101,34 @@ output_value=$((cat /sys/kernel/debug/fortytwo/jiffies) 2>&1)
 
 
 actual_value=$(cat /proc/timer_list | grep jiffies | sed -n '3p')
-printf "[TEST 5] Compare for $Cyan $actual_value $Color_Off in output.. (cat /sys/kernel/debug/fortytwo/id).."
+printf "[TEST 6] Compare for $Cyan $actual_value $Color_Off in output.. (cat /sys/kernel/debug/fortytwo/id).."
 printf "$BWhite $output_value $Color_Off\n"
 
+# TEST 7
+output_value=$((echo -n 'dabb' > /sys/kernel/debug/fortytwo/jiffies) 2>&1)
+
+
+string_to_search="Invalid argument"
+printf "[TEST 7] Searching for $Cyan $string_to_search $Color_Off in output.. (echo -n 'dabb' > /sys/kernel/debug/fortytwo/jiffies).."
+
+if [[ "$output_value" == *"$string_to_search"* ]]
+	then
+		printf "$BGreen OK $Color_Off\n"
+	else
+		printf "$BRed KO $Color_Off\n"
+fi
+
+# TEST 8
+output_value=$((cat /sys/kernel/debug/fortytwo/foo) 2>&1)
+
+
+string_to_search=""
+printf "[TEST 8] Comparing for $Cyan '$string_to_search' $Color_Off in output.. (cat /sys/kernel/debug/fortytwo/foo).."
+
+if [[ "$output_value" == "$string_to_search" ]]
+	then
+		printf "$BGreen OK $Color_Off\n"
+	else
+		printf "$BRed KO $Color_Off\n"
+fi
 rmmod debugfs.ko
