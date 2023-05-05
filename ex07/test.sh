@@ -137,7 +137,7 @@ cat "$PWD/testfiles/midfile" > /sys/kernel/debug/fortytwo/foo
 output_value=$((cat /sys/kernel/debug/fortytwo/foo) 2>&1)
 
 
-string_to_search="$(cat $PWD/testfiles/midfile)"
+string_to_search="$(cat $PWD/Makefile)"
 printf "[TEST 7] Comparing for $Cyan '$string_to_search' $Color_Off in output.. (cat /sys/kernel/debug/fortytwo/foo).."
 
 if [[ "$output_value" == "$string_to_search" ]]
