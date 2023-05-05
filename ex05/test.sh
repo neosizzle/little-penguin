@@ -43,7 +43,7 @@ if [[ "$output_value" == *"$string_to_search"* ]]
 	then
 		printf "$BGreen OK $Color_Off\n"
 	else
-		printf "$BRed KO $Color_Off\n
+		printf "$BRed KO $Color_Off\n"
 fi
 
 
