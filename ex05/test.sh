@@ -21,6 +21,7 @@ BPurple='\033[1;35m'      # Purple
 BCyan='\033[1;36m'        # Cyan
 BWhite='\033[1;37m'       # White
 
+clear
 make
 insmod fortytwo.ko
 # echo "bad write echo -n "jng123" > /dev/fortytwo"
@@ -37,7 +38,7 @@ output_value=$((echo -n 'jng123' > /dev/fortytwo) 2>&1)
 
 
 string_to_search="Invalid argument"
-printf "Searching for $BPurple $string_to_search $Color_Off in output..\n"
+printf "Searching for $BPurple $string_to_search $Color_Off in output.. (echo -n 'jng123' > /dev/fortytwo)\n"
 
 if [[ "$output_value" == *"$string_to_search"* ]]
 	then
