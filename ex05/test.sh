@@ -11,7 +11,7 @@ insmod fortytwo.ko
 # echo ""
 
 output_value="$(echo -n "jng123" > /dev/fortytwo)"
-echo $output_value
+echo "OUTPUT IS $output_value"
 # if [[ "$output_value" == *"asd"* ]]
 # 	then
 # 	echo Hey that\'s a large number.
