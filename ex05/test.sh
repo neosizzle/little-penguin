@@ -10,7 +10,7 @@ insmod fortytwo.ko
 # cat /dev/fortytwo
 # echo ""
 
-output_value="$(echo -n "jng123" > /dev/fortytwo)"
+output_value="$(echo -n "jng123" > /dev/fortytwo) 2>&1"
 echo "OUTPUT IS $output_value"
 # if [[ "$output_value" == *"asd"* ]]
 # 	then
