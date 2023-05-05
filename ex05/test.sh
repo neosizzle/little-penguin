@@ -35,12 +35,16 @@ insmod fortytwo.ko
 
 output_value=$((echo -n 'jng123' > /dev/fortytwo) 2>&1)
 
-printf "$BPurple OUTPUT IS $output_value $Color_Off"
-# if [[ "$output_value" == *"asd"* ]]
-# 	then
-# 	echo Hey that\'s a large number.
-# 	pwd
-# fi
+
+string_to_search="Invalid argument"
+printf "Searching for $BPurple $string_to_search $Color_Off in output..\n"
+
+if [[ "$output_value" == *"$string_to_search"* ]]
+	then
+		printf "$BGreen OK $Color_Off\n"
+	else
+		printf "$BRed KO $Color_Off\n
+fi
 
 
 rmmod fortytwo.ko
