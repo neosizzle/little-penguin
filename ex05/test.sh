@@ -35,7 +35,7 @@ insmod fortytwo.ko
 
 output_value=$((echo -n 'jng123' > /dev/fortytwo) 2>&1)
 
-echo "$BPurple OUTPUT IS $output_value $Color_Off"
+printf "$BPurple OUTPUT IS $output_value $Color_Off"
 # if [[ "$output_value" == *"asd"* ]]
 # 	then
 # 	echo Hey that\'s a large number.
