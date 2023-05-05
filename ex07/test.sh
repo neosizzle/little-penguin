@@ -189,4 +189,5 @@ if [[ "$output_value" == "$string_to_search" ]]
 fi
 
 
+umount /sys/kernel/debug/
 rmmod debugfs.ko
