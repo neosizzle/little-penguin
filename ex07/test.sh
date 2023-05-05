@@ -132,15 +132,29 @@ if [[ "$output_value" == "$string_to_search" ]]
 		printf "$BRed KO $Color_Off\n"
 fi
 
-# TEST 7
+# TEST 9
 cat "$PWD/testfiles/midfile" > /sys/kernel/debug/fortytwo/foo
 output_value=$((cat /sys/kernel/debug/fortytwo/foo) 2>&1)
 
 
-string_to_search="$(cat $PWD/Makefile)"
-printf "[TEST 7] Comparing for $Cyan '$string_to_search' $Color_Off in output.. (cat /sys/kernel/debug/fortytwo/foo).."
+string_to_search="$(cat $PWD/testfiles/midfile)"
+printf "[TEST 9] Comparing for $Cyan '$string_to_search' $Color_Off in output.. (cat /sys/kernel/debug/fortytwo/foo).."
 
 if [[ "$output_value" == "$string_to_search" ]]
+	then
+		printf "$BGreen OK $Color_Off\n"
+	else
+		printf "$BRed KO $Color_Off\n"
+fi
+
+# TEST 10
+output_value=$((cat "$PWD/testfiles/megafile" > /sys/kernel/debug/fortytwo/foo) 2>&1)
+
+
+string_to_search="Not enough space"
+printf "[TEST 10] Searching for $Cyan $string_to_search $Color_Off in output.. (cat "$PWD/testfiles/megafile" > /sys/kernel/debug/fortytwo/foo).."
+
+if [[ "$output_value" == *"$string_to_search"* ]]
 	then
 		printf "$BGreen OK $Color_Off\n"
 	else
