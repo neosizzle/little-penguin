@@ -73,5 +73,18 @@ if [[ "$output_value" == *"$string_to_search"* ]]
 		printf "$BRed KO $Color_Off\n"
 fi
 
+# TEST 4
+output_value=$((echo -n 'jng' > /dev/fortytwo) 2>&1)
+
+
+val_to_cmp=$?
+printf "[TEST 4] Return value $BPurple 0 $Color_Off in output.. (echo -n 'jng' > /dev/fortytwo)\n"
+
+if [[ $val_to_cmp == 0 ]]
+	then
+		printf "$BGreen OK $Color_Off\n"
+	else
+		printf "$BRed KO $Color_Off\n"
+fi
 
 rmmod fortytwo.ko
