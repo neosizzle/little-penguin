@@ -101,7 +101,7 @@ output_value=$((cat /sys/kernel/debug/fortytwo/jiffies) 2>&1)
 
 
 actual_value=$(cat /proc/timer_list | grep jiffies | sed -n '3p')
-printf "[TEST 6] Compare for $Cyan $actual_value $Color_Off in output.. (cat /sys/kernel/debug/fortytwo/id).."
+printf "[TEST 6] Compare for $Cyan $actual_value $Color_Off in output.. (cat /sys/kernel/debug/fortytwo/jiffies).."
 printf "$BWhite $output_value $Color_Off\n"
 
 # TEST 7
@@ -151,7 +151,7 @@ fi
 output_value=$((cat "$PWD/testfiles/megafile" > /sys/kernel/debug/fortytwo/foo) 2>&1)
 
 
-string_to_search="Not enough space"
+string_to_search="No space left on device"
 printf "[TEST 10] Searching for $Cyan $string_to_search $Color_Off in output.. (cat "$PWD/testfiles/megafile" > /sys/kernel/debug/fortytwo/foo).."
 
 if [[ "$output_value" == *"$string_to_search"* ]]
