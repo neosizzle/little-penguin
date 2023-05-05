@@ -23,8 +23,8 @@ BWhite='\033[1;37m'       # White
 
 clear
 make && insmod debugfs.ko
-chmod a+rx /sys/kernel/debug
 mount -t debugfs none /sys/kernel/debug/
+chmod a+rx /sys/kernel/debug
 
 # TEST 1
 output_value=$((echo -n 'jng123' > /sys/kernel/debug/fortytwo/id) 2>&1)
