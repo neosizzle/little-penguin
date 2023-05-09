@@ -81,7 +81,7 @@ ssize_t myfd_read(struct file *fp,
 				  size_t size,
 				  loff_t *offs)
 {
-	size_t t, i;
+	int t, i;
 	char *tmp2;
 	/***************
 	 * Malloc like a boss
