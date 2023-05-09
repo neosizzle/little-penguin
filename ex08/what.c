@@ -27,7 +27,7 @@ static int __init myfd_init(void)
 static void __exit myfd_cleanup(void)
 {
 	// TODO ; cleanup function
-	misc_deregister(myfd_device);
+	misc_deregister(&myfd_device);
 }
 
 // ssize_t simple_read_from_buffer(char __user *user, size_t size, loff_t *offset, char *tmp, int len)
