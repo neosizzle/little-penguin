@@ -26,6 +26,8 @@ static int __init myfd_init(void)
 }
 static void __exit myfd_cleanup(void)
 {
+	// TODO ; cleanup function
+	misc_unregister(myfd_device);
 }
 ssize_t myfd_read(struct file *fp,
 				  char __user *user,
