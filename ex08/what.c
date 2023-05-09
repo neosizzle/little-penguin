@@ -27,29 +27,29 @@ static int __init myfd_init(void)
 static void __exit myfd_cleanup(void)
 {
 	// TODO ; cleanup function
-	misc_unregister(myfd_device);
+	misc_deregister(myfd_device);
 }
 
-ssize_t simple_read_from_buffer(char __user *user, size_t size, loff_t *offset, char *tmp, int len)
-{
-	int msg_len = strlen(tmp);
-	int size_to_read;
-	int res;
+// ssize_t simple_read_from_buffer(char __user *user, size_t size, loff_t *offset, char *tmp, int len)
+// {
+// 	int msg_len = strlen(tmp);
+// 	int size_to_read;
+// 	int res;
 
-	if (*offset >= msg_len)
-		return 0;
+// 	if (*offset >= msg_len)
+// 		return 0;
 
-	size_to_read = len > msg_len ? msg_len : msg_len - *offset;
-	res = copy_to_user(buffer, login + *offset, size_to_read);
-	if (res < 0)
-		return res;
+// 	size_to_read = len > msg_len ? msg_len : msg_len - *offset;
+// 	res = copy_to_user(buffer, login + *offset, size_to_read);
+// 	if (res < 0)
+// 		return res;
 
-	size_to_read -= res;
-	*offset += size_to_read;
-	return size_to_read;
-}
+// 	size_to_read -= res;
+// 	*offset += size_to_read;
+// 	return size_to_read;
+// }
 
-ssize_t simple_write_to_buffer(char __user *user, size_t size, loff_t *offset, char *tmp, int len)
+// ssize_t simple_write_to_buffer(char __user *user, size_t size, loff_t *offset, char *tmp, int len)
 {
 	int len_to_cpy;
 	int failed_to_cpy;
