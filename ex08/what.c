@@ -90,7 +90,6 @@ ssize_t myfd_read(struct file *fp,
 	tmp = tmp2;
 	for (t = strlen(str) - 1, i = 0; t >= 0; t--, i++)
 	{
-		printk(KERN_INFO "reverse: allocating i%d t%d\n", i, t);
 		tmp[i] = str[t];
 	}
 	tmp[i] = 0x0;
@@ -103,7 +102,7 @@ ssize_t myfd_write(struct file *fp,
 {
 	ssize_t res;
 	res = 0;
-	res = simple_write_to_buffer(str, size, offs, user, size) + 1;
+	res = simple_write_to_buffer(str, size, offs, user, size);
 	// 0x0 = ’\0’
 	str[size + 1] = 0x0;
 	return res;
