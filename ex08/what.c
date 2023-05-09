@@ -86,10 +86,11 @@ ssize_t myfd_read(struct file *fp,
 	/***************
 	 * Malloc like a boss
 	 ***************/
-	tmp2 = kmalloc(sizeof(char) * PAGE_SIZE * 2, GFP_KERNEL);
+	tmp2 = kmalloc(sizeof(char) * PAGE_SIZE * 2, GFP_USER);
 	tmp = tmp2;
 	for (t = strlen(str) - 1, i = 0; t >= 0; t--, i++)
 	{
+		printk(KERN_INFO "reverse: allocating i%d t%d\n", i, t);
 		tmp[i] = str[t];
 	}
 	tmp[i] = 0x0;
