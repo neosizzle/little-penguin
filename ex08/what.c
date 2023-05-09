@@ -29,6 +29,53 @@ static void __exit myfd_cleanup(void)
 	// TODO ; cleanup function
 	misc_unregister(myfd_device);
 }
+
+ssize_t simple_read_from_buffer(char __user *user, size_t size, loff_t *offset, char *tmp, int len)
+{
+	int msg_len = strlen(tmp);
+	int size_to_read;
+	int res;
+
+	if (*offset >= msg_len)
+		return 0;
+
+	size_to_read = len > msg_len ? msg_len : msg_len - *offset;
+	res = copy_to_user(buffer, login + *offset, size_to_read);
+	if (res < 0)
+		return res;
+
+	size_to_read -= res;
+	*offset += size_to_read;
+	return size_to_read;
+}
+
+ssize_t simple_write_to_buffer(char __user *user, size_t size, loff_t *offset, char *tmp, int len)
+{
+	int len_to_cpy;
+	int failed_to_cpy;
+
+	if (*offset >= PAGE_SIZE)
+	{
+		printk(KERN_INFO "reverse: *offset >= PAGE_SIZE at offset %d len %d \n", *offset, len);
+		return -ENOSPC;
+	}
+	if (len + *offset > PAGE_SIZE)
+	{
+		printk(KERN_INFO "reverse: len + *offset > PAGE_SIZE at offset %d len %d \n", *offset, len);
+		return -ENOSPC;
+	}
+
+	len_to_cpy = len;
+	failed_to_cpy = copy_from_user(tmp + *offset, user, len_to_cpy);
+	if (failed_to_cpy < 0)
+		return failed_to_cpy;
+	if (failed_to_cpy != 0)
+		printk(KERN_INFO "foo: failed to copy last %d bytes\n", failed_to_cpy);
+	// len_to_cpy -= failed_to_cpy;
+	*offset += len_to_cpy;
+	return len_to_cpy;
+}
+
 ssize_t myfd_read(struct file *fp,
 				  char __user *user,
 				  size_t size,
