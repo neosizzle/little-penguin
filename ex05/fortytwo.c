@@ -127,9 +127,6 @@ static int fortytwo_init(void)
 		return -1;
 	}
 
-	// testing
-	// struct class*  test_class = class_create(THIS_MODULE, "test_class");
-
 	//	create device node /dev/device
 	if (device_create(fortytwo_class, NULL, major, NULL, DEVICE_NAME) == NULL)
 	{
