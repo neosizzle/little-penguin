@@ -1,66 +1,37 @@
-#include <linux/nsproxy.h>
-#include <linux/fs.h>
-#include <linux/kernel.h>
-#include <linux/slab.h>
 #include <linux/module.h>
-#include <linux/fs.h>
-#include <linux/types.h>
-#include <linux/uaccess.h>
-#include <linux/dcache.h>
-#include <linux/init.h>
-#include <linux/path.h>
-#include <linux/namei.h>
-#include <linux/string.h>
-#include <linux/seq_file.h>
-#include <linux/mnt_namespace.h>
-#include <linux/fs_struct.h>
+#include <linux/kernel.h>
 #include <linux/proc_fs.h>
-#include <linux/mount.h>
-#include <linux/wait.h>
-#include <linux/fs_pin.h>
 
-char *file_name = "mymounts";
-
-ssize_t read_proc(struct file *filp, char *buf, size_t len, loff_t *offp )
-{
-	struct dentry *curdentry;
-	printk("root   %s", current->fs->root.mnt->mnt_root->d_name.name);
-	list_for_each_entry(curdentry,
-			    &current->fs->root.mnt->mnt_root->d_subdirs,
-			    d_child)
-	{
-		if (curdentry->d_flags & DCACHE_MOUNTED)
-			printk("%s    /%s", curdentry->d_name.name,
-					      curdentry->d_name.name);
-	}
-	return 0;
-}
-
-static int open_proc(struct inode *inode, struct file *file)
+int my_open(struct inode *, struct file *)
 {
 	return 0;
 }
 
-struct file_operations proc_fops = {
-	.read = read_proc,
-	.open = open_proc,
-};
-
-int proc_init(void)
+ssize_t my_read(struct file *, char __user *, size_t, loff_t *)
 {
-	proc_create(file_name, 0, NULL, &proc_fops);
-
+	printk(KERN_INFO "proc device read\n");
 	return 0;
 }
 
-void proc_cleanup(void)
-{
-	remove_proc_entry(file_name, NULL);
+struct proc_ops myops{
+	.proc_open = &my_open,
+	.proc_read = &my_read,
+	.owner = THIS_MODULE,
 }
 
-module_init(proc_init);
-module_exit(proc_cleanup);
+static struct proc_dir_entry *mymnt_dev;
 
-MODULE_DESCRIPTION("Proc driver");
-MODULE_AUTHOR("Knage");
-MODULE_LICENSE("GPL");
+int module_start(void)
+{
+	// create proc device
+	mymnt_dev = proc_create("mymounts",0660,NULL,&myops);
+	return 0;
+}
+
+void module_end(void)
+{
+	proc_remove(mymnt_dev);
+}
+
+module_init(module_start);
+module_exit(module_end)
