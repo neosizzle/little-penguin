@@ -1,6 +1,7 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/dcache.h>
+#include <linux/fs.h>
 
 int module_start(void)
 {
