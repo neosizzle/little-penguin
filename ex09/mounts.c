@@ -1,5 +1,6 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
+#include <linux/dcache.h>
 
 int init_module(void)
 {
@@ -14,7 +15,7 @@ int init_module(void)
     return 0;
 }
 
-int exit_module(void)
+void exit_module(void)
 {
 	
 }
