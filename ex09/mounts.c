@@ -6,13 +6,12 @@
 int module_start(void)
 {
 	
-    struct dentry *curdentry;
+	struct mnt_namespace *ns = current->nsproxy->mnt_ns;
+	struct mount *mnt;
 
-    list_for_each_entry(curdentry, &current->fs->root.mnt->mnt_root->d_subdirs, d_child)
-    {
-        if ( curdentry->d_flags & DCACHE_MOUNTED)
-            printk("%s is mounted", curdentry->d_name.name);
-    }
+	list_for_each_entry(mnt, &ns->list, mnt_list) {
+		printk("sheesh is mounted\n");
+	}
     return 0;
 }
 
