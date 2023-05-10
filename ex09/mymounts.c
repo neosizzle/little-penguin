@@ -16,8 +16,7 @@ ssize_t my_read(struct file *, char __user *, size_t, loff_t *)
 struct proc_ops myops = {
 	.proc_open = &my_open,
 	.proc_read = &my_read,
-	.owner = THIS_MODULE,
-}
+};
 
 static struct proc_dir_entry *mymnt_dev;
 
