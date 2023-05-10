@@ -20,6 +20,8 @@ ssize_t my_read(struct file *, char __user *, size_t, loff_t *)
 			    &current->fs->root.mnt->mnt_root->d_subdirs,
 			    d_child)
 	{
+		printk("not %s    /%s", curdentry->d_name.name,
+					      curdentry->d_name.name);
 		if (curdentry->d_flags & DCACHE_MOUNTED)
 			printk("%s    /%s", curdentry->d_name.name,
 					      curdentry->d_name.name);
