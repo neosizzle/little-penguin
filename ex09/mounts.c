@@ -2,7 +2,7 @@
 #include <linux/module.h>
 #include <linux/dcache.h>
 
-int init_module(void)
+int module_start(void)
 {
 	
     struct dentry *curdentry;
@@ -15,10 +15,10 @@ int init_module(void)
     return 0;
 }
 
-void exit_module(void)
+void module_end(void)
 {
 	
 }
 
-module_init(init_module);
-module_exit(exit_module);
+module_init(module_start);
+module_exit(module_end);
