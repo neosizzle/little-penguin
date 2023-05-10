@@ -14,9 +14,9 @@ static int init_module(void)
     return 0;
 }
 
-static int exit_module(void)
+void int exit_module(void)
 {
-	return 0;
+	
 }
 
 module_init(init_module);
