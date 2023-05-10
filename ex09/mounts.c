@@ -1,7 +1,7 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 
-void init_module()
+static int init_module(void)
 {
 	
     struct dentry *curdentry;
@@ -14,9 +14,9 @@ void init_module()
     return 0;
 }
 
-void exit_module()
+static int exit_module(void)
 {
-
+	return 0;
 }
 
 module_init(init_module);
