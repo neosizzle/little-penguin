@@ -2,6 +2,9 @@
 #include <linux/kernel.h>
 #include <linux/proc_fs.h>
 
+MODULE_LICENSE("Dual BSD/GPL");
+MODULE_AUTHOR("Liran B.H");
+
 int my_open(struct inode *, struct file *)
 {
 	return 0;
