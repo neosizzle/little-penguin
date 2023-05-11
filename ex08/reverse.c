@@ -50,7 +50,7 @@ ssize_t myfd_write(struct file *fp,
 {
 	ssize_t res;
 
-	for (int i = 0; i < (PAGE_SIZE * 2) - 1; ++i)
+	for (int i = 0; i < (PAGE_SIZE); ++i)
 	{
 		str[i] = 0;
 	}
