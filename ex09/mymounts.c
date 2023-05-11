@@ -35,6 +35,7 @@ static struct proc_dir_entry *mymnt_dev;
 
 int module_start(void)
 {
+	printk("mymounts module loaded \n");
 	// create proc device
 	mymnt_dev = proc_create("mymounts",0660,NULL,&myops);
 	return 0;
