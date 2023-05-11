@@ -1,0 +1,6 @@
+[  186.783690] mymounts module loaded
+[  192.531082] root   /
+[  192.531089] boot    /boot
+[  192.533131] sys    /sys
+[  192.554322] proc    /proc
+[  192.556243] run    /run

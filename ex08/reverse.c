@@ -35,7 +35,7 @@ ssize_t myfd_read(struct file *fp,
 {
 	int t, i;
 	char *tmp2;
-	tmp2 = kmalloc(sizeof(char) * PAGE_SIZE * 2, GFP_USER);
+	tmp2 = kcalloc(sizeof(char), PAGE_SIZE * 2, GFP_USER);
 	tmp = tmp2;
 	for (t = strlen(str) - 1, i = 0; t >= 0; t--, i++) {
 		tmp[i] = str[t];
