@@ -35,7 +35,7 @@ ssize_t myfd_read(struct file *fp,
 {
 	int t, i;
 	char *tmp2;
-	tmp2 = kcalloc(sizeof(char), PAGE_SIZE * 2, GFP_USER);
+	tmp2 = kmalloc(sizeof(char) * PAGE_SIZE * 2, GFP_USER);
 	tmp = tmp2;
 	for (t = strlen(str) - 1, i = 0; t >= 0; t--, i++) {
 		tmp[i] = str[t];
@@ -49,6 +49,11 @@ ssize_t myfd_write(struct file *fp,
 		loff_t *offs)
 {
 	ssize_t res;
+
+	for (int i = 0; i < PAGE_SIZE * 2; ++i)
+	{
+		str[i] = 0;
+	}
 	res = 0;
 	res = simple_write_to_buffer(str, size, offs, user, size);
 	str[size + 1] = 0x0;
