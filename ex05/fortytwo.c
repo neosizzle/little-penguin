@@ -42,7 +42,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 }
 
 static int dev_open(struct inode *inodep, struct file *filep) {
-   printk(KERN_INFO "Rickroll device opened\n");
+   printk(KERN_INFO "42 device opened\n");
    return 0;
 }
 

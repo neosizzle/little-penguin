@@ -7,6 +7,9 @@
 #include <linux/usb/input.h>
 #include <linux/hid.h>
 
+MODULE_AUTHOR("jng");
+MODULE_LICENSE("GPL");
+
 /*  
  * mouse_table - hardware definitions for mouse and keyboard
  */
@@ -65,6 +68,3 @@ void cleanup_module(void)
 	printk(KERN_INFO "Cleaning up module.\n");
 	usb_deregister(&input_driver);
 }
-
-// By setting the license to GPL, so people know that the code is open-source
-MODULE_LICENSE("GPL");

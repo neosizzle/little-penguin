@@ -3,8 +3,8 @@
 #include <linux/proc_fs.h>
 #include <linux/fs_struct.h>
 
-MODULE_LICENSE("Dual BSD/GPL");
-MODULE_AUTHOR("Liran B.H");
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("jng");
 
 int my_open(struct inode *, struct file *)
 {
@@ -13,15 +13,12 @@ int my_open(struct inode *, struct file *)
 
 ssize_t my_read(struct file *, char __user *, size_t, loff_t *)
 {
-	printk(KERN_INFO "proc device read\n");
 	struct dentry *curdentry;
 	printk("root   %s", current->fs->root.mnt->mnt_root->d_name.name);
 	list_for_each_entry(curdentry,
 			    &current->fs->root.mnt->mnt_root->d_subdirs,
 			    d_child)
 	{
-		printk("not %s    /%s", curdentry->d_name.name,
-					      curdentry->d_name.name);
 		if (curdentry->d_flags & DCACHE_MOUNTED)
 			printk("%s    /%s", curdentry->d_name.name,
 					      curdentry->d_name.name);

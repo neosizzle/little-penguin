@@ -51,7 +51,6 @@ ssize_t myfd_write(struct file *fp,
 	ssize_t res;
 	res = 0;
 	res = simple_write_to_buffer(str, size, offs, user, size);
-	// 0x0 = ’\0’
 	str[size + 1] = 0x0;
 	return res;
 }

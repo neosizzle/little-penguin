@@ -2,9 +2,11 @@
 #include <linux/kernel.h>	/* Needed for KERN_INFO */
 #include <linux/debugfs.h> /* debugfs*/
 #include <linux/miscdevice.h>
-// #include <linux/stdio.h> /* sprintf*/
 #include <linux/jiffies.h>/* jiffies*/
 #include <linux/mutex.h> /* Mutex*/
+
+MODULE_AUTHOR("jng");
+MODULE_LICENSE("GPL");
 
 void cleanup(struct dentry * debugfs)
 {
@@ -224,6 +226,3 @@ void cleanup_module(void)
 	cleanup(fortytwo);
 	printk(KERN_INFO "Cleaning up module.\n");
 }
-
-// By setting the license to GPL, so people know that the code is open-source
-MODULE_LICENSE("GPL");

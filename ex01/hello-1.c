@@ -4,6 +4,9 @@
 #include <linux/module.h>	/* Needed by all modules */
 #include <linux/kernel.h>	/* Needed for KERN_INFO */
 
+MODULE_AUTHOR("jng");
+MODULE_LICENSE("GPL");
+
 int init_module(void)
 {
 	printk(KERN_INFO "Hello world !\n");
@@ -18,6 +21,3 @@ void cleanup_module(void)
 {
 	printk(KERN_INFO "Cleaning up module.\n");
 }
-
-// By setting the license to GPL, so people know that the code is open-source
-MODULE_LICENSE("GPL");
