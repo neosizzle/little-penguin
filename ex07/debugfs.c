@@ -179,7 +179,9 @@ struct dentry *fortytwo;
 
 int init_module(void)
 {
-	printk(KERN_INFO "Hello world !\n");
+	struct dentry *id_file;
+	struct dentry *jiffy_file;
+	struct dentry *foo_file;
 
 	// create debugfs directory
 	fortytwo = debugfs_create_dir("fortytwo", NULL);
@@ -190,7 +192,7 @@ int init_module(void)
 	}
 
 	// create id file
-	struct dentry *id_file = debugfs_create_file("id", 0666,
+	id_file = debugfs_create_file("id", 0666,
                                    fortytwo, NULL,
                                    &id_fops);
 	if (id_file == NULL)
@@ -200,7 +202,7 @@ int init_module(void)
 	}
 
 	// create jiffies file
-	struct dentry *jiffy_file = debugfs_create_file("jiffies", 0444,
+	jiffy_file = debugfs_create_file("jiffies", 0444,
                                    fortytwo, NULL,
                                    &jiffies_fops);
 	if (jiffy_file == NULL)
@@ -211,7 +213,7 @@ int init_module(void)
 
 	// crate foo file
 	mutex_init(&foo_mutex);
-	struct dentry *foo_file = debugfs_create_file("foo", 0644,
+	foo_file = debugfs_create_file("foo", 0644,
                                    fortytwo, NULL,
                                    &foo_fops);
 	if (foo_file == NULL)
