@@ -29,7 +29,7 @@ output_value=$((cat /dev/reverse) 2>&1)
 
 
 string_to_search="fdsa"
-printf "[TEST 1] Comparing for $Cyan '$string_to_search' $Color_Off in output.. (cat /sys/kernel/debug/fortytwo/foo).."
+printf "[TEST 1] Comparing for $Cyan '$string_to_search' $Color_Off in output.. (cat /dev/reverse).."
 
 if [[ "$output_value" == "$string_to_search" ]]
 	then
@@ -44,7 +44,7 @@ output_value=$((cat /dev/reverse) 2>&1)
 
 
 string_to_search="racecar"
-printf "[TEST 2] Comparing for $Cyan '$string_to_search' $Color_Off in output.. (cat /sys/kernel/debug/fortytwo/foo).."
+printf "[TEST 2] Comparing for $Cyan '$string_to_search' $Color_Off in output.. (cat /dev/reverse).."
 
 if [[ "$output_value" == "$string_to_search" ]]
 	then
@@ -59,7 +59,7 @@ output_value=$((cat /dev/reverse) 2>&1)
 
 
 string_to_search="god yzal eht revo spmuj xof nworb kciuq eht"
-printf "[TEST 3] Comparing for $Cyan '$string_to_search' $Color_Off in output.. (cat /sys/kernel/debug/fortytwo/foo).."
+printf "[TEST 3] Comparing for $Cyan '$string_to_search' $Color_Off in output.. (cat /dev/reverse).."
 
 if [[ "$output_value" == "$string_to_search" ]]
 	then
