@@ -53,12 +53,12 @@ static ssize_t foo_write(struct file *filep, const char *buffer, size_t len, lof
 
 	if (*offset >= PAGE_SIZE)
 	{
-		printk(KERN_INFO "foo: *offset >= PAGE_SIZE at offset %d len %d \n", *offset, len);
+		printk(KERN_INFO "foo: *offset >= PAGE_SIZE at offset %lld len %lu \n", *offset, len);
 		return -ENOSPC;
 	}
 	if (len + *offset > PAGE_SIZE)
 	{
-		printk(KERN_INFO "foo: len + *offset > PAGE_SIZE at offset %d len %d \n", *offset, len);
+		printk(KERN_INFO "foo: len + *offset > PAGE_SIZE at offset %lld len %lu \n", *offset, len);
 		return -ENOSPC;
 	}
 
@@ -87,11 +87,12 @@ static struct file_operations jiffies_fops = {
 
 static ssize_t jiffy_read(struct file *filep, char *buffer, size_t len, loff_t *offset) {
 	char jiffy_str[1024 + 1];
-	sprintf(jiffy_str, "%lu", jiffies);
-	int msg_len = strlen(jiffy_str);
+	int msg_len;
 	int size_to_read;
 	int res;
 
+	sprintf(jiffy_str, "%lu", jiffies);
+	msg_len = strlen(jiffy_str);
 	printk(KERN_INFO "Read /sys/kernel/debug/fortytwo/id of length %lu with offset %lld\n", len, *offset);
 	if (*offset >= msg_len)
 		return 0;
