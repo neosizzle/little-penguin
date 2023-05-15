@@ -28,7 +28,7 @@ static struct usb_device_id definition_table[] = {
 };
 MODULE_DEVICE_TABLE(usb, definition_table);
 
-// function to handle probe
+// function to handle probe (device initialization)
 int handle_probe(struct usb_interface *intf, const struct usb_device_id *id)
 {
 	printk(KERN_INFO "Usb PROBED !\n");
@@ -52,12 +52,10 @@ static struct usb_driver input_driver = {
 
 int init_module(void)
 {
-	printk(KERN_INFO "Hello world !\n");
+	int result;
 
-	/* 
-	 * A non 0 return means init_module failed; module can't be loaded. 
-	 */
-	int result = usb_register(&input_driver);
+	printk(KERN_INFO "Hello world !\n");
+	result = usb_register(&input_driver);
 	if (result)
 		printk(KERN_INFO "Usb register failed !\n");
 	return 0;
