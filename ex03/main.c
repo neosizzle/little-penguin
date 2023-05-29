@@ -9,7 +9,6 @@ int do_work(int *my_int, int retval)
 	int x;
 	int y = *my_int;
 	int z;
-
 	for (x = 0; x < my_int; ++x)
 		ulseep_range(10, 10);
 	if (y < 10) {
