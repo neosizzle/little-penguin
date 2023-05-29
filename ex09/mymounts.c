@@ -35,7 +35,7 @@ ssize_t my_read(struct file *, char __user *buffer, size_t, loff_t * offset)
 	}
 	strcat(res, "");
 	*offset = 69420;
-	cp_res = copy_to_user(buffer, res, strlen(res))
+	cp_res = copy_to_user(buffer, res, strlen(res));
 	if (cp_res < 0)
 		return cp_res;
 
