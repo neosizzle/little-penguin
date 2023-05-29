@@ -11,7 +11,7 @@ int do_work(int *my_int, int retval)
 	int z;
 
 	for (x = 0; x < my_int; ++x)
-		udelay(10);
+		ulseep_range(10, 10);
 	if (y < 10) {
 		pr_info("We slept a long time!");
 		z = x * y;
