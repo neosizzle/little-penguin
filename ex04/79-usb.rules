@@ -1,4 +1,6 @@
 # /etc/udev/rules.d/79-usb.rules  
-
+# module to /lib/modules/6.1.11
+# depmod
+# udevadm control --reload-rules && udevadm trigger
 ACTION=="add", SUBSYSTEM=="usb", PROGRAM="/usr/sbin/modprobe hello-2"
 ACTION=="remove", SUBSYSTEM=="usb", PROGRAM="/usr/sbin/rmmod hello-2"
