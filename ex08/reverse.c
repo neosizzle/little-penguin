@@ -23,8 +23,8 @@ char *tmp;
 static int __init myfd_init(void)
 {
 	int retval;
+	
 	retval = misc_register(&(*(&(myfd_device))));
-
 	return 0;
 }
 
@@ -50,9 +50,9 @@ ssize_t myfd_read(struct file *fp,
 }
 
 ssize_t myfd_write(struct file *fp,
-				const char __user *user,
-				size_t size,
-				loff_t *offs)
+			const char __user *user,
+			size_t size,
+			loff_t *offs)
 {
 	ssize_t res;
 
