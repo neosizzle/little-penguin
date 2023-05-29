@@ -19,6 +19,7 @@ int do_work(int *my_int, int retval)
 	}
 	return 1;
 }
+
 int my_init(void)
 {
 	int x = 10;
@@ -26,6 +27,7 @@ int my_init(void)
 	x = do_work(&x, x);
 	return x;
 }
+
 void my_exit(void)
 {
 }
