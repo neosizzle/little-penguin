@@ -28,10 +28,12 @@ ssize_t my_read(struct file *, char __user *buffer, size_t, loff_t * offset)
 			    d_child)
 	{
 		if (curdentry->d_flags & DCACHE_MOUNTED)
-		strcat(res, curdentry->d_name.name);
-		strcat(res, "	/");
-		strcat(res,  curdentry->d_name.name);
-		strcat(res, "\n");
+		{
+			strcat(res, curdentry->d_name.name);
+			strcat(res, "	/");
+			strcat(res,  curdentry->d_name.name);
+			strcat(res, "\n");
+		}
 	}
 	strcat(res, "");
 	*offset = 69420;
