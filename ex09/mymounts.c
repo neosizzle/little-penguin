@@ -18,7 +18,7 @@ ssize_t my_read(struct file *, char __user *buffer, size_t, loff_t * offset)
 	struct dentry *curdentry;
 	char *res = kmalloc(69420, GFP_USER);
 
-	if (*offset >= 69420) return;
+	if (*offset >= 69420) return 0;
 	strcat(res, "root   ");
 	strcat(res,  current->fs->root.mnt->mnt_root->d_name.name);
 	strcat(res, "\n");
