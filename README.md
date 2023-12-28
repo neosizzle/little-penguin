@@ -13,6 +13,222 @@ Kernel modules are something like shared objects in linux binaries, where the ba
 
 It is used to add additional hardware support like device drivers and custom system calls on to the base kernel. Although, there are some critisism regarding a modular kernel which may cause [storage fragmentation](https://en.wikipedia.org/wiki/Fragmentation_(computing))
 
+## Module loading
+When the kernel encounters a feature that is required to acomplish by a module, the [kernel module daemon](https://man7.org/linux/man-pages/man8/kmod.8.html) will attempt to call `modprobe` on the missing module. The missing module can be passed in one 2 forms: the module name or an alias.
+
+In the case of an alias, `modprobe` will look through its config files in `/etc/modprobe.conf` to find the actual module name. It will also locate any dependency modules in `/lib/modules/version/modules.dep` that needed to be loaded first.
+
+Once everything is in order, `modprobe` calls [insmod](https://linux.die.net/man/8/insmod) to actually load the module. `insmod` does not do any alias-checking or dependency mapping, it just receives a file name and attempts to load it into the kernel. Pretty dumb.
+
+## Implementation
+>https://www.kernel.org/doc/Documentation/kbuild/modules.txt
+
+Below is a list of useful commands you can use to debug and test modules : 
+- lsmod (list all installed modules)
+- modprobe (isntall a module)
+- modinfo (get information about a module)
+- rmmod (uninstall a module)
+
+requried headers:
+`linux/kernel.h`
+`linux/module.h`
+
+
+required functions : 
+```
+int init_module(void); // module init function / entry point
+
+void cleanup_module(void)// module exit funtion
+```
+`init_module(void)` will be the entry point of your module, usually it will contain initialization processes followed by the logic of what your kernel is supposed to do.
+
+
+`cleanup_module(void)` contains, as the name suggests, cleanup functions for your module logics. Memory deallocation, device deregistration, destruction of nodes and so on.
+
+makefile rules and goals
+```
+obj-m += hello-1.o
+
+all:
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+
+clean:
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+```
+The `obj-m` rule is required by the kernels makefile to make a kernel module with the name the same as your .o's name compared to an object file or executable. If your kernel module consists of a collection of objects, you should use `obj-y` instead.
+
+We would also want to call `make modules` in the kernels makefile and specify our working directory to search instead of compiling on our machine. After all, a .o is not the same as a .ko because a .ko also links with some kernel sources to make the .ko fully functional.
+
+## module license
+There are some conventions surrounding the use of `MODULE_LICENSE` macro which specifies what can be done to a software.
+
+
+
+
+## Installation
+Since modules vary for different kernels, We will need to use the Kernels `Makefile` to compile our module. For linux kernels, head to `/lib/modules/<kernel-version>/` and run `make SUBDIRS=<directory of source code> modules` to compile the module source into the native kernel module, and run `make SUBDIRS=<directory of source code> modules_install` to install the module into the system.
+
+Once those are done, use `modprobe(8)` to load the module into the kernel and you should have it running already.
+
+## Hot plugging
+
+compile procedure:
+1. inject driver code at module source https://static.lwn.net/images/pdf/LDD3/ch13.pdf
+2. compile module and put it in a place where depmod can find `/lib/modules`
+3. run depmod to generate dependency map to be read by udev
+
+hotplug procedure:
+1. kernel fires event uevent at udev
+2. udev rules will traverse dependency and alias list and set env vars for device type
+3. modprobe alias is executed, module(s) are loaded for every alias match
+4. hardware is registered based on the evr vars above.
+
+## Device drivers
+### General
+Drivers for any hardware share some common code and procedure as follows:
+
+1. Definition of hardware
+    > In the module, you will need to define an ID table to specify which hardware is supported by the module itself. Every device class will have their id struct that you need to initialize. A function returning an array of those structs are needed to tell the kernel that this module is meant for those devices.
+2. Exposing definition to userspace
+    > Once the hardware definitions are done in kernelspace, Those definitions will be known to the userspace via the `MODULE_DEVICE_TABLE` macro. This macro will create a local variable called `__mod_class_device` in the module that point to the ID list created earlier. programs like `depmod` will look for this symbols and generate a dependency map so that this module is recognized by high level device handlers like udev.
+3. Create driver instance.
+    > Once we have our definitions ready, its time to create the real driver code. For the device that you are listening for, there will be a driver struct named like `dev_driver`. This structure consists of a number of function callbacks and variables that describe the PCI driver to the PCI core. Below is how a driver struct for PCI devices look like 
+    ```
+        static struct pci_driver pci_driver = {
+             .name = "pci_skel",
+             .id_table = ids,
+             .probe = probe,
+             .remove = remove,
+        };
+    ```
+4. Register and unregister
+    > Once we have the prerequisites ready, its time to register the priver with the core kernel so that it is runnable by doing `device_register_driver(&pci_driver);`. You can unregister by also doing `device_unregister_driver(&pci_driver);`
+
+### USB
+>https://www.kernel.org/doc/html/latest/driver-api/usb/writing_usb_driver.html
+>https://static.lwn.net/images/pdf/LDD3/ch13.pdf
+
+>The universal serial bus (USB) is a connection between a host computer and a number of peripheral devices.
+
+The reason behind the creation is to solve compatibility issues across different external devices and to replace various slow busses. 
+
+The USB Host controller is a mechanism in the host that is in charge of listening to data sent by USB devices. The USB devices will not send data unless its asked by the USB Host Controller hence making it to be able to du plug-and-play.
+
+There is also the USB protocol which specifies the standard and the convention data which were to be transferred by a USB device. Non-Adherence to the standard will require the user to install the driver for the said device.
+
+For USB Classes and protocol codes when creating a device or interface ids using `USB_DEVICE_INFO` or `USB_INTERFACE_INFO` can be found [here](https://www.usb.org/defined-class-codes)
+
+There are 2 types of USB drivers, a USB Host driver is installed in the host and controls the USB devices which are plugged in. A USB gadget driver controls the how a single USB device looks from a host computer.
+
+![](https://i.imgur.com/mhRwCJu.png)
+The [USBcore](https://docs.kernel.org/driver-api/usb/callbacks.html) is a linux subsystem that helps us deal with the complexity of a USB device.
+
+![](https://i.imgur.com/RbYHp0G.png)
+An endpoint is a channel that allows data to travel in inly 1 direction. It is similar to a unifirectional pipe.
+
+A USB endpoint can be one of four different types that describe how the data is
+transmitted:
+
+- CONTROL
+    > The control endpoint is used to configure the device and get information about the device, it is relatively small in side and the protocol will always ensure that there is enough space before any transmission is done on this endpoint
+- INTERRUPT
+    > These endpoints are used by the host device when it wants to request for more data and its typically used in mice and keyboards. It is also small in size and the USB protocol will also reserve its size before transmissions
+- BULK
+    > These endpoints are large in size as they are used to transfer large amounts of data. The data is transfered in BULK packets and splitting usually happens when a single transmission isnt enough due to bandwith limitations. It is commonly used in pen drives, network devices and printers.
+
+- ISOCHRONOUS
+    > These endpoints also transmits large amount of data in a stream, but there might be some data loss in between. The endpoints are common in media devices such as webcams and mics.
+
+Control and bulk endpoints are used for asynchronous data transfers, whenever the driver decides to use them. Interrupt and isochronous endpoints are periodic. This means that these endpoints are set up to transfer data at fixed times continuously, which causes their bandwidth to be reserved by the USB core.
+
+The USB code in the Linux kernel communicates with all USB devices using something called a urb (USB request block). This request block is described with the struct urb structure and can be found in the include/linux/usb.h file.
+
+```
+struct urb
+{
+// (IN) device and pipe specify the endpoint queue
+      struct usb_device *dev;         // pointer to associated USB device
+      unsigned int pipe;              // endpoint information
+
+      unsigned int transfer_flags;    // URB_ISO_ASAP, URB_SHORT_NOT_OK, etc.
+
+// (IN) all urbs need completion routines
+      void *context;                  // context for completion routine
+      usb_complete_t complete;        // pointer to completion routine
+
+// (OUT) status after each completion
+      int status;                     // returned status
+
+// (IN) buffer used for data transfers
+      void *transfer_buffer;          // associated data buffer
+      u32 transfer_buffer_length;     // data buffer length
+      int number_of_packets;          // size of iso_frame_desc
+
+// (OUT) sometimes only part of CTRL/BULK/INTR transfer_buffer is used
+      u32 actual_length;              // actual data buffer length
+
+// (IN) setup stage for CTRL (pass a struct usb_ctrlrequest)
+      unsigned char *setup_packet;    // setup packet (control only)
+
+// Only for PERIODIC transfers (ISO, INTERRUPT)
+  // (IN/OUT) start_frame is set unless URB_ISO_ASAP isn't set
+      int start_frame;                // start frame
+      int interval;                   // polling interval
+
+  // ISO only: packets are only "best effort"; each can have errors
+      int error_count;                // number of errors
+      struct usb_iso_packet_descriptor iso_frame_desc[0];
+};
+```
+
+A urb is used to send or receive data to or from a specific USB endpoint on a specific USB device in an asynchronous manner. Every endpoint in a device can handle a queue of urbs, so that multiple urbs can be sent to the same endpoint before the queue is empty. An URB undergoes the following lifecycle : 
+
+
+1. Creation by the USB Driver
+2. Assigned to a specific endpoint of a specific USB device.
+3.  Submitted to the USB core, by the USB device driver.
+4.  Submitted to the specific USB host controller driver for the specified device by the USB core.
+5.  Processed by the USB Host Controller and URB is consumed as data is sent
+6.  Host Contrller notifies device driver about completion of transfer
+
+### Character devices and misc devices
+>https://static.lwn.net/images/pdf/LDD3/ch03.pdf
+>https://www.linuxjournal.com/article/2920
+>https://stackoverflow.com/questions/18456155/what-is-the-difference-between-misc-drivers-and-char-drivers
+
+A character device is a device that have streams of charcaters written or read from it.
+
+Char devices can be access by its name in the file system, and it is conventionally placed in the `/dev/` directory. 
+A **Major number** of a device is an identification of the driver for the device. Devices handled by the same driver share the same major number. The **Minor number** refers to which device exactly it is referred to and it is generated by the drivers themselves. The number pair is used to identify devices in a linux system. The numbers can be allocated using `int alloc_chrdev_region(dev_t *dev, unsigned int firstminor,
+ unsigned int count, char *name);` in a module and required to be freed in the end.
+ 
+The kernel data structure *file_operations* is used by a file object as a reference to common system calls `read, write...`  as it contains pointers to functions implemented in the char device driver.
+
+The struct *file*, defined in ``<linux/fs.h>``, is the second most important data structure used in device drivers. The file structure represents an open file descriptor in the kernelspace. The contents of that struct can be found [here](https://www.oreilly.com/library/view/linux-device-drivers/0596000081/ch03s04.html).
+
+The struct *inode* in the kernel is used internally to represent files. In contract to the *file* struct which is used to represent open file desciptors
+
+ 
+Every driver needs to first generate a major and minor number pair. After that, a device class should be created at /sys/class using `class_create`, using that class we can create a device node at `/dev/device` using `device_create`, and register the device in kernelspace using `cdev_init` and `cdev_add` .
+
+Similar to character devices, misc devices also has the usual `file_operations` and can behave like a character device (or any other device if you want it to). The actual purpose of misc devices is to act as a classification for devices which dont fit into any mainstream category. 
+
+Misc devices dont need to allocate space for a major number, since all misc devices are classified under one major number. You can see what number it is by reading `/proc/devices`. 
+
+## Processes
+In every operating system, there will be a structure which represents a process in the kernel. This structure is called a Process Control Block (PCB).
+
+Processes in the linux kernel space is represented by [`task_struct`](https://docs.huihoo.com/doxygen/linux/kernel/3.7/structtask__struct.html)s.
+
+In our file handler, to get the current process which initiated the system call, you can do so by reading the `current` macro which is defined [here](https://elixir.bootlin.com/linux/latest/source/arch/x86/include/asm/current.h).
+
+
+## Directory listing (fs access)
+To access the file system of a process, there is a member in the `task_struct` structure in the kernel, which allows you to get the representation of a file system which the process is in. 
+
+To start traversing a file system from its root, we can use the `fs` member to get the file system of the process, and access its root in the file system. the `root` member is actually a `path` struct which represents a directory parh in kernelspace. There will be a `debtry *` inside of the path struct, which you can use to access its children via iteration using `list_for_each_entry`
+
+
 ## Linux hardware devices, sysfs, udev
 ## Busses and device files
 >In computer architecture, a bus is a communication system that transfers data between components inside a computer, or between computers. 
