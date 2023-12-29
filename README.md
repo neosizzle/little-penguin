@@ -289,3 +289,96 @@ $$
 - **udev** the low level applications that manages kernel device nodes that corresponds to hardware
 - **dbus** is a framework and API to establish inter-application communications
 - [**Network manager**](https://en.wikipedia.org/wiki/NetworkManager) is a daemon that sits on top of udev library that provides a high-level interface to network configuration and setup and is accessible via dbus to apps.
+
+## Boot configuration
+- [The Boot and The Startup](https://hackmd.io/rpewLqCCTN6JfitSESiLig)
+
+To configure a GRUB bootloader, you need to first install it to a block device by doing `grub-install /dev/sda`, replace `/dev/sda` with the block device you are using
+
+:::danger
+This will override the current bootloader of your machine and your machine will attempt to boot to the linux system on next reboot, so please be careful
+:::
+
+After installation, you need to tell the bootloader to locate your kernel and how to run it. Here is the configuration I used: 
+```
+# Begin /boot/grub/grub.cfg
+set default=0
+set timeout=5
+
+insmod ext2
+set root=(hd0,6)
+
+menuentry "GNU/Linux, Linux 6.1.11-lfs-11.3" {
+        linux   /boot/vmlinuz-6.1.11-jng root=/dev/sda2 ro
+}
+```
+the `set root=(hd0,6)` line represents which partition is gurb installed in. the `hd(0, 6)` section corresponds to `sda6` in such a way that `hd` means hard drive, `0` means sda and `6` means 6.
+
+the `linux   /boot/vmlinuz-6.1.11-jng root=/dev/sda2 ro` line specifies the kernel location as well as the root of the new linux system. The bootloader will read this configration and execute startup scrips after.
+
+Upon loading a bootloader, system v or any central manager will runs some scripts defined by the user / by default to set up and verify the health of the system before any startup processes are initialized. Here are the things the script runs in order prior to startup : 
+
+![](https://i.imgur.com/w0oXHmC.png)
+1. Mounts virtual fs
+    >Creates and mounts `/pros`, `/sys`, `/dev`. Mounts `/run` (tmpfs or in memory fs to store runtime info)
+2. Loads required modules
+    > Use [modprobe](https://linux.die.net/man/8/modprobe) to load modules in `/etc/sysconfig/modules`. Modules are pieces of code that can be loaded/executed and unloaded into kernel on-demand
+3. Udev cold plugging
+    > Cold plugging is the process of shutting down a computer in order to add or remove a component or to synchronize data with the computer
+    > This procedure populates /dev with device nodes and starts udev daemon. Udev will then create and validate the device nodes as per defined.
+4. Deactivates and activates swap partitions if any
+5. Store and restore time in hardware clock (hwclock)
+6. Checks and verifies the health of file systems
+    > [man fsck](https://linux.die.net/man/8/fsck)
+7. Mounts local filesystems defined in `/etc/fstab`
+8. Replays any failed uevents during boot and creates additional devices
+9. Cleans temporary directories and `/run` and `/tmp`. Also creates any files in `/etc/sysconfig/createfiles`
+10. Sets up console
+    > Fonts, locales, keyboards defined in `/etc/sysconfig/console`
+11. Starts the local network
+    > sets hostname and initializes loopback interface
+12. Run sysctl
+    > sysctl is used to modify kernel parameters at runtime. It reads from `/etc/sysctl.conf` and set values accordingly
+13. Start log daemons for kernel and system.
+14. Starts and configure network interfaces.
+    > Stops and unmounts all network related devices / interfaces.
+    > Start all network interfaces defined in ifconfig files
+16. Kills remaining processes.
+
+## ex00
+The goal of ex00 is to compile a kernel with the `CONFIG_LOCALVERSION_AUTO` flag enabled. To look for this configuration, look for the .config file in the directory where the kernel is to be compiled and change the line to `CONFIG_LOCALVERSION_AUTO=y`. That flag will then be activated upon compilation.
+
+After compiling the kernel, replace the kernel executable in your devices boot drive.
+
+The option we enabled just now prints extra information about our kernel version, in the boot log. `Linux version 6.4.0-rc4-00013-ge338142b39cf` is shown as opposed to `Linux version 6.4.0` without the flag enabled.
+
+## ex01
+This exercise wants us to compile and load a custom hello world kernel module. The module code itself will follow the kernel module format; it will print hello world to the kernel logs which is accessible by the command `dmesg -w`
+
+## ex02
+This exercise wants us to create a patchfile for the kernel source that follows [linux submitting-patches.rst](https://github.com/torvalds/linux/blob/master/Documentation/process/submitting-patches.rst)
+ guidelines.
+
+ The purpose of the patch is to add a custom version to our kernel, with the help of `CONFIG_LOCALVERSION_AUTO` from ex00 and a new kernel flag, `EXTRAVERSION` field in the kernels Makefile
+
+ ## ex03
+This exercise exposes us to the coding style of the linux kernel [here](https://github.com/torvalds/linux/blob/master/Documentation/process/4.Coding.rst). We have to change a pre given source code to fir this style. 
+
+Or we can use the clang formatter that came with kernel source to automatically format codes that can be formatted automatically
+
+## ex04
+In this exercise, we will be implementing hotplug USB devices. When a USB device is plugged in, we need to be able to load the module to support that device and to be able to run some logic on probe and on disconnect. For now, the module that we would be loading is a simple hello world kernel.
+
+To acheive this, our module needs to have a `usb_driver` struct (defined by kernel) that will contain all the functions for disconnect and probing, as well as some metadata describing what type of usb device this is. Once we have the struct ready, we can call another kernel function, `‎usb_register` to notify the rest of the kernel about this new usb device.
+
+In the USB rules file in udev, we need to add the following lines. This file automatically take action on behalf of you when a USB device connects, it will work on small modules.
+
+
+```
+# /etc/udev/rules.d/79-usb.rules  
+# module to /lib/modules/6.1.11
+# depmod
+# udevadm control --reload-rules && udevadm trigger
+ACTION=="add", SUBSYSTEM=="usb", PROGRAM="/usr/sbin/modprobe hello-2"
+ACTION=="remove", SUBSYSTEM=="usb", PROGRAM="/usr/sbin/rmmod hello-2""
+```
