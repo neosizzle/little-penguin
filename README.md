@@ -371,7 +371,7 @@ In this exercise, we will be implementing hotplug USB devices. When a USB device
 
 To acheive this, our module needs to have a `usb_driver` struct (defined by kernel) that will contain all the functions for disconnect and probing, as well as some metadata describing what type of usb device this is. Once we have the struct ready, we can call another kernel function, `‎usb_register` to notify the rest of the kernel about this new usb device.
 
-In the USB rules file in udev, we need to add the following lines. This file automatically take action on behalf of you when a USB device connects, it will work on small modules.
+In the USB rules file in udev, we need to add the following lines. This file automatically take action on behalf of you when a USB device connects, it will load the compiled module.
 
 
 ```
@@ -382,3 +382,5 @@ In the USB rules file in udev, we need to add the following lines. This file aut
 ACTION=="add", SUBSYSTEM=="usb", PROGRAM="/usr/sbin/modprobe hello-2"
 ACTION=="remove", SUBSYSTEM=="usb", PROGRAM="/usr/sbin/rmmod hello-2""
 ```
+
+## ex05
