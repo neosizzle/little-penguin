@@ -384,3 +384,22 @@ ACTION=="remove", SUBSYSTEM=="usb", PROGRAM="/usr/sbin/rmmod hello-2""
 ```
 
 ## ex05
+We have to create a misc char device driver with a dynamic minor number that behaves a certain way when its read or written. A character device is a **device file which can have streams of characters written or read from it**. The characters device will be created **in the form of a misc device**, which means its not robust and **does not implement the full character device interfaces**, just simple read / write interfaces will do
+
+To acheive this result;
+1. Allocate major and minor number using `alloc_chrdev_region(&major , --minor, 1, DEVICE_NAME);`
+2. Create device class node using `class_create(THIS_MODULE, "fortytwo_class");`, this will make the class appear in `/sys/classes`
+3. After that, we can create a empty device node with `device_create(fortytwo_class, NULL, major, NULL, DEVICE_NAME)` which will create an entry in `/dev/device`
+4. Once that is done, we are able to register the device with a file operations class, creating it in `/dev/<device name>` and it should be interactable.
+
+# ex06
+This exercise wants to to compile the kernel linux-next and boot it. Linux next is like the beta of the next linux kernel version, so it contains some new and non matured features.
+
+# ex07
+This exercise focus on creating a debugfs directory and running code inside it. Debugfs is a special file system which is a RAM based file system to read and write data. We also learn about mutex locking in kernel, which is not so different compared to userspace.
+
+# ex08
+just like ex03, we have to fix the coding stle of another file.
+
+# ex09
+MAke a program that lists out all the mountpoints with the associated name.  To do this, we need to inspect the `fs struct` in the kernel. The `fs` struct has a property called `root` which specifies the root `fs` struct. Every `fs` struct also has a sub directory. We can iterate the sub directories linked list using `list_for_each_entry`  the `mount` property from `root` gives is this iterator so much hope.
